@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
 
-export default function AdminLoginPage() {
+function LoginForm() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -158,5 +158,17 @@ export default function AdminLoginPage() {
         </p>
       </motion.div>
     </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-midnight flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-terracotta" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
