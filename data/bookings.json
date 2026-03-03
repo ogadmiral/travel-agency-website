@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "guest": "Sarah Mitchell",
+    "email": "sarah@example.com",
+    "tour": "Sahara Odyssey",
+    "date": "April 15, 2026",
+    "guests": 2,
+    "status": "Pending",
+    "message": "We're celebrating our anniversary and would love a private tent setup if possible.",
+    "submittedAt": "2026-03-03T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "guest": "James Chen",
+    "email": "james.c@example.com",
+    "tour": "Atlas Retreat",
+    "date": "May 1, 2026",
+    "guests": 4,
+    "status": "Pending",
+    "message": "Traveling with elderly parents. Need accessibility considerations for the hike.",
+    "submittedAt": "2026-03-03T08:00:00Z"
+  },
+  {
+    "id": 3,
+    "guest": "Emma Laurent",
+    "email": "emma.l@example.com",
+    "tour": "Royal Riad Tour",
+    "date": "May 18, 2026",
+    "guests": 1,
+    "status": "Confirmed",
+    "message": "Solo traveler, interested in photography workshops along the way.",
+    "submittedAt": "2026-03-03T06:00:00Z"
+  },
+  {
+    "id": 4,
+    "guest": "Ahmed El-Sayed",
+    "email": "ahmed@example.com",
+    "tour": "Medina Immersion",
+    "date": "April 22, 2026",
+    "guests": 3,
+    "status": "Confirmed",
+    "message": "We have dietary restrictions (halal). Also interested in calligraphy classes.",
+    "submittedAt": "2026-03-02T10:00:00Z"
+  },
+  {
+    "id": 5,
+    "guest": "Lisa Park",
+    "email": "lisa.park@example.com",
+    "tour": "Coastal Winds",
+    "date": "May 10, 2026",
+    "guests": 2,
+    "status": "Declined",
+    "message": "Hoping to add a surfing lesson to the itinerary.",
+    "submittedAt": "2026-03-02T08:00:00Z"
+  },
+  {
+    "guest": "Taylor Swift",
+    "email": "mdshoop.company@gmail.com",
+    "tour": "Royal Riad Tour",
+    "date": "2026-03-03",
+    "guests": 1,
+    "message": "test",
+    "status": "Confirmed",
+    "submittedAt": "2026-03-03T23:10:14.780Z",
+    "id": 6
+  }
+]

@@ -1,0 +1,165 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Moroccan Sunset Palette */
+  --background: #faf6f1;
+  --foreground: #1a1225;
+  --card: #ffffff;
+  --card-foreground: #1a1225;
+  --popover: #ffffff;
+  --popover-foreground: #1a1225;
+  --primary: #c8553d;
+  --primary-foreground: #faf6f1;
+  --secondary: #f2e6d9;
+  --secondary-foreground: #1a1225;
+  --muted: #f0e8df;
+  --muted-foreground: #6b5e54;
+  --accent: #e88d67;
+  --accent-foreground: #1a1225;
+  --destructive: #c8553d;
+  --destructive-foreground: #faf6f1;
+  --border: #e0d5c8;
+  --input: #e0d5c8;
+  --ring: #c8553d;
+  --chart-1: #c8553d;
+  --chart-2: #e88d67;
+  --chart-3: #1b1f3b;
+  --chart-4: #d4956a;
+  --chart-5: #f2c078;
+  --radius: 0.5rem;
+
+  /* Custom tokens */
+  --midnight: #1b1f3b;
+  --sunset-pink: #e8a0bf;
+  --sunset-orange: #e88d67;
+  --terracotta: #c8553d;
+  --sand: #f2e6d9;
+  --gold: #d4956a;
+
+  /* Sidebar / Dashboard tokens */
+  --sidebar: rgba(27, 31, 59, 0.85);
+  --sidebar-foreground: #faf6f1;
+  --sidebar-primary: #e88d67;
+  --sidebar-primary-foreground: #1a1225;
+  --sidebar-accent: rgba(232, 141, 103, 0.15);
+  --sidebar-accent-foreground: #faf6f1;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #e88d67;
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Geist', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'Geist Mono', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom Moroccan colors */
+  --color-midnight: var(--midnight);
+  --color-sunset-pink: var(--sunset-pink);
+  --color-sunset-orange: var(--sunset-orange);
+  --color-terracotta: var(--terracotta);
+  --color-sand: var(--sand);
+  --color-gold: var(--gold);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Grainy texture overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Arched frame clip-path */
+.arch-frame {
+  clip-path: ellipse(50% 55% at 50% 55%);
+}
+
+.arch-frame-tall {
+  border-radius: 50% 50% 0 0 / 35% 35% 0 0;
+  overflow: hidden;
+}
+
+/* Hide scrollbar for horizontal scroll */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Moroccan sunset gradient backgrounds */
+.gradient-sunset {
+  background: linear-gradient(135deg, #c8553d 0%, #e88d67 40%, #e8a0bf 70%, #1b1f3b 100%);
+}
+
+.gradient-sunset-soft {
+  background: linear-gradient(135deg, #f2e6d9 0%, #faf6f1 50%, #f2e6d9 100%);
+}

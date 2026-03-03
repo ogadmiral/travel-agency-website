@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Sahara Odyssey",
+    "destination": "Merzouga",
+    "price": 1200,
+    "duration": "3 Nights",
+    "nextDate": "2026-04-15",
+    "status": "Active",
+    "subtitle": "3-Night Desert Expedition",
+    "image": "/images/sahara-desert.jpg",
+    "description": "Luxury camp under the stars with private camel treks and Berber cuisine."
+  },
+  {
+    "id": 2,
+    "name": "Medina Immersion",
+    "destination": "Fes",
+    "price": 3100,
+    "duration": "5 Days",
+    "nextDate": "2026-04-22",
+    "status": "Active",
+    "subtitle": "5-Day Cultural Journey",
+    "image": "/images/medina-streets.jpg",
+    "description": "Navigate the ancient labyrinth of Fes with private guides and artisan workshops."
+  },
+  {
+    "id": 3,
+    "name": "Atlas Retreat",
+    "destination": "High Atlas",
+    "price": 2800,
+    "duration": "4 Nights",
+    "nextDate": "2026-05-01",
+    "status": "Active",
+    "subtitle": "4-Night Mountain Escape",
+    "image": "/images/atlas-mountains.jpg",
+    "description": "Hike through Berber villages and stay in a restored kasbah with panoramic views."
+  },
+  {
+    "id": 4,
+    "name": "Coastal Winds",
+    "destination": "Essaouira",
+    "price": 1900,
+    "duration": "3 Days",
+    "nextDate": "2026-05-10",
+    "status": "Draft",
+    "subtitle": "3-Day Essaouira Getaway",
+    "image": "/images/essaouira-coast.jpg",
+    "description": "Explore the windswept Atlantic coast, fresh seafood, and bohemian art galleries."
+  },
+  {
+    "id": 5,
+    "name": "Royal Riad Tour",
+    "destination": "Multi-City",
+    "price": 5200,
+    "duration": "7 Nights",
+    "nextDate": "2026-05-18",
+    "status": "Active",
+    "subtitle": "7-Night Grand Tour",
+    "image": "/images/luxury-riad.jpg",
+    "description": "The ultimate Moroccan journey from Marrakech to the Sahara to the coast."
+  },
+  {
+    "id": 6,
+    "name": "Blue City Escape",
+    "destination": "Chefchaouen",
+    "price": 1600,
+    "duration": "2 Nights",
+    "nextDate": "2026-06-01",
+    "status": "Draft",
+    "subtitle": "2-Night Blue City Getaway",
+    "image": "/images/hero-morocco.jpg",
+    "description": "Wander through the enchanting blue-washed streets of Chefchaouen."
+  }
+]

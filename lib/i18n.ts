@@ -1,0 +1,314 @@
+export type Locale = "en" | "fr" | "ar"
+
+export const locales: Locale[] = ["en", "fr", "ar"]
+
+export const localeNames: Record<Locale, string> = {
+  en: "English",
+  fr: "Français",
+  ar: "العربية",
+}
+
+export const localeDir: Record<Locale, "ltr" | "rtl"> = {
+  en: "ltr",
+  fr: "ltr",
+  ar: "rtl",
+}
+
+// ─── Translation Dictionaries ──────────────────────────────────
+
+const en = {
+  // Hero
+  heroTagline: "Luxury Moroccan Journeys",
+  heroExplore: "Explore Experiences",
+  est: "Est. 2018",
+
+  // Featured Experiences
+  curatedCollection: "Curated Collection",
+  featured: "Featured",
+  experiences: "Experiences",
+  featuredDescription: "Each journey is meticulously crafted, blending luxury with authentic Moroccan culture for unforgettable moments.",
+  viewAll: "View All",
+  from: "From",
+
+  // Destinations
+  whereWeJourney: "Where We Journey",
+  iconic: "Iconic",
+  destinations: "Destinations",
+  // Destination names & taglines
+  marrakech: "Marrakech",
+  marrakechTag: "The Red City",
+  fes: "Fes",
+  fesTag: "The Spiritual Capital",
+  sahara: "Sahara",
+  saharaTag: "The Endless Sands",
+  essaouira: "Essaouira",
+  essaouiraTag: "Wind City of the Atlantic",
+
+  // About
+  ourStory: "Our Story",
+  whereTradition: "Where Tradition Meets",
+  luxury: "Luxury",
+  aboutSecondParagraph: "Every itinerary is handcrafted by our team of local experts who have spent decades weaving connections across the kingdom, from the spice markets of Marrakech to the star-lit camps of the Sahara.",
+  journeysCrafted: "Journeys Crafted",
+  yearsExperience: "Years Experience",
+  guestSatisfaction: "Guest Satisfaction",
+  destinationsLabel: "Destinations",
+
+  // Contact
+  getInTouch: "Get In Touch",
+  startPlanning: "Start Planning Your",
+  journey: "Journey",
+  contactDescription: "Tell us about your dream Moroccan adventure and our travel designers will craft a personalized itinerary just for you.",
+  firstName: "First Name",
+  lastName: "Last Name",
+  email: "Email",
+  interestedIn: "Interested In",
+  selectExperience: "Select an experience",
+  customJourney: "Custom Journey",
+  message: "Message",
+  sendInquiry: "Send Inquiry",
+  sending: "Sending...",
+  messageSent: "Message Sent",
+  messageSentDesc: "We'll be in touch within 24 hours.",
+  yourFirstName: "Your first name",
+  yourLastName: "Your last name",
+  yourEmail: "your@email.com",
+  tellUsAbout: "Tell us about your dream trip...",
+
+  // Footer
+  explore: "Explore",
+  company: "Company",
+  newsletter: "Newsletter",
+  ourTeam: "Our Team",
+  partnerships: "Partnerships",
+  careers: "Careers",
+  press: "Press",
+  joinBtn: "Join",
+  enterEmail: "Enter email",
+  thankYouSubscribing: "Thank you for subscribing!",
+  copyright: "2026 Dar Voyages. All rights reserved.",
+  footerDescription: "Curating extraordinary Moroccan journeys since 2018. Every detail crafted for the discerning traveler.",
+
+  // Side Navigation
+  home: "Home",
+  about: "About",
+  contact: "Contact",
+  followUs: "Follow us",
+  menu: "Menu",
+
+  // Tour Detail
+  backToHome: "Back to Home",
+  duration: "Duration",
+  destination: "Destination",
+  nextDeparture: "Next Departure",
+  pricePerPerson: "Price per Person",
+  bookThisTour: "Book This Tour",
+  tourNotFound: "Tour not found",
+  tourNotFoundDesc: "The tour you're looking for doesn't exist.",
+  loading: "Loading...",
+
+  // Admin
+  adminDashboard: "Admin Dashboard",
+  overview: "Overview",
+  tourManager: "Tour Manager",
+  bookings: "Bookings",
+  contentEditor: "Content Editor",
+  viewPublicSite: "View Public Site",
+  settings: "Settings",
+  signOut: "Sign Out",
+  language: "Language",
+}
+
+const fr: typeof en = {
+  heroTagline: "Voyages de Luxe au Maroc",
+  heroExplore: "Explorer les Expériences",
+  est: "Dep. 2018",
+
+  curatedCollection: "Collection Sélectionnée",
+  featured: "Expériences",
+  experiences: "Phares",
+  featuredDescription: "Chaque voyage est soigneusement conçu, mêlant luxe et culture marocaine authentique pour des moments inoubliables.",
+  viewAll: "Voir Tout",
+  from: "À partir de",
+
+  whereWeJourney: "Nos Destinations",
+  iconic: "Destinations",
+  destinations: "Emblématiques",
+  marrakech: "Marrakech",
+  marrakechTag: "La Ville Rouge",
+  fes: "Fès",
+  fesTag: "La Capitale Spirituelle",
+  sahara: "Sahara",
+  saharaTag: "Les Sables Infinis",
+  essaouira: "Essaouira",
+  essaouiraTag: "Cité du Vent de l'Atlantique",
+
+  ourStory: "Notre Histoire",
+  whereTradition: "Où la Tradition Rencontre le",
+  luxury: "Luxe",
+  aboutSecondParagraph: "Chaque itinéraire est élaboré par notre équipe d'experts locaux qui ont passé des décennies à tisser des liens à travers le royaume, des marchés d'épices de Marrakech aux camps étoilés du Sahara.",
+  journeysCrafted: "Voyages Réalisés",
+  yearsExperience: "Années d'Expérience",
+  guestSatisfaction: "Satisfaction Client",
+  destinationsLabel: "Destinations",
+
+  getInTouch: "Contactez-Nous",
+  startPlanning: "Commencez à Planifier Votre",
+  journey: "Voyage",
+  contactDescription: "Parlez-nous de votre aventure marocaine de rêve et nos concepteurs de voyages créeront un itinéraire personnalisé rien que pour vous.",
+  firstName: "Prénom",
+  lastName: "Nom de Famille",
+  email: "E-mail",
+  interestedIn: "Intéressé Par",
+  selectExperience: "Sélectionnez une expérience",
+  customJourney: "Voyage Sur Mesure",
+  message: "Message",
+  sendInquiry: "Envoyer la Demande",
+  sending: "Envoi en cours...",
+  messageSent: "Message Envoyé",
+  messageSentDesc: "Nous vous recontacterons dans les 24 heures.",
+  yourFirstName: "Votre prénom",
+  yourLastName: "Votre nom de famille",
+  yourEmail: "votre@email.com",
+  tellUsAbout: "Parlez-nous de votre voyage de rêve...",
+
+  explore: "Explorer",
+  company: "Entreprise",
+  newsletter: "Newsletter",
+  ourTeam: "Notre Équipe",
+  partnerships: "Partenariats",
+  careers: "Carrières",
+  press: "Presse",
+  joinBtn: "Rejoindre",
+  enterEmail: "Entrez votre e-mail",
+  thankYouSubscribing: "Merci de votre inscription !",
+  copyright: "2026 Dar Voyages. Tous droits réservés.",
+  footerDescription: "Des voyages marocains extraordinaires depuis 2018. Chaque détail conçu pour le voyageur exigeant.",
+
+  home: "Accueil",
+  about: "À Propos",
+  contact: "Contact",
+  followUs: "Suivez-nous",
+  menu: "Menu",
+
+  backToHome: "Retour à l'Accueil",
+  duration: "Durée",
+  destination: "Destination",
+  nextDeparture: "Prochain Départ",
+  pricePerPerson: "Prix par Personne",
+  bookThisTour: "Réserver ce Tour",
+  tourNotFound: "Tour introuvable",
+  tourNotFoundDesc: "Le tour que vous recherchez n'existe pas.",
+  loading: "Chargement...",
+
+  adminDashboard: "Tableau de Bord",
+  overview: "Aperçu",
+  tourManager: "Gestion des Tours",
+  bookings: "Réservations",
+  contentEditor: "Éditeur de Contenu",
+  viewPublicSite: "Voir le Site Public",
+  settings: "Paramètres",
+  signOut: "Déconnexion",
+  language: "Langue",
+}
+
+const ar: typeof en = {
+  heroTagline: "رحلات فاخرة في المغرب",
+  heroExplore: "استكشف التجارب",
+  est: "منذ 2018",
+
+  curatedCollection: "مجموعة مختارة",
+  featured: "تجارب",
+  experiences: "مميزة",
+  featuredDescription: "كل رحلة مصممة بعناية، تجمع بين الرفاهية والثقافة المغربية الأصيلة لحظات لا تُنسى.",
+  viewAll: "عرض الكل",
+  from: "ابتداءً من",
+
+  whereWeJourney: "وجهاتنا",
+  iconic: "وجهات",
+  destinations: "مميزة",
+  marrakech: "مراكش",
+  marrakechTag: "المدينة الحمراء",
+  fes: "فاس",
+  fesTag: "العاصمة الروحية",
+  sahara: "الصحراء",
+  saharaTag: "الرمال اللانهائية",
+  essaouira: "الصويرة",
+  essaouiraTag: "مدينة الرياح الأطلسية",
+
+  ourStory: "قصتنا",
+  whereTradition: "حيث يلتقي التقليد",
+  luxury: "بالفخامة",
+  aboutSecondParagraph: "كل برنامج رحلة مصمم يدوياً من قبل فريقنا من الخبراء المحليين الذين أمضوا عقوداً في نسج العلاقات عبر المملكة، من أسواق التوابل في مراكش إلى المخيمات المرصعة بالنجوم في الصحراء.",
+  journeysCrafted: "رحلة منظمة",
+  yearsExperience: "سنوات خبرة",
+  guestSatisfaction: "رضا العملاء",
+  destinationsLabel: "وجهات",
+
+  getInTouch: "تواصل معنا",
+  startPlanning: "ابدأ التخطيط",
+  journey: "لرحلتك",
+  contactDescription: "أخبرنا عن مغامرتك المغربية المثالية وسيقوم مصممو السفر لدينا بإعداد برنامج مخصص لك.",
+  firstName: "الاسم الأول",
+  lastName: "اسم العائلة",
+  email: "البريد الإلكتروني",
+  interestedIn: "مهتم بـ",
+  selectExperience: "اختر تجربة",
+  customJourney: "رحلة مخصصة",
+  message: "الرسالة",
+  sendInquiry: "إرسال الاستفسار",
+  sending: "جاري الإرسال...",
+  messageSent: "تم إرسال الرسالة",
+  messageSentDesc: "سنتواصل معك خلال 24 ساعة.",
+  yourFirstName: "اسمك الأول",
+  yourLastName: "اسم عائلتك",
+  yourEmail: "بريدك@الإلكتروني.com",
+  tellUsAbout: "أخبرنا عن رحلة أحلامك...",
+
+  explore: "استكشف",
+  company: "الشركة",
+  newsletter: "النشرة الإخبارية",
+  ourTeam: "فريقنا",
+  partnerships: "الشراكات",
+  careers: "الوظائف",
+  press: "الصحافة",
+  joinBtn: "اشترك",
+  enterEmail: "أدخل بريدك الإلكتروني",
+  thankYouSubscribing: "شكراً لاشتراكك!",
+  copyright: "2026 دار فوياج. جميع الحقوق محفوظة.",
+  footerDescription: "رحلات مغربية استثنائية منذ 2018. كل تفصيل مصمم للمسافر المتميز.",
+
+  home: "الرئيسية",
+  about: "من نحن",
+  contact: "اتصل بنا",
+  followUs: "تابعنا",
+  menu: "القائمة",
+
+  backToHome: "العودة للرئيسية",
+  duration: "المدة",
+  destination: "الوجهة",
+  nextDeparture: "الرحلة القادمة",
+  pricePerPerson: "السعر للشخص",
+  bookThisTour: "احجز هذه الرحلة",
+  tourNotFound: "الرحلة غير موجودة",
+  tourNotFoundDesc: "الرحلة التي تبحث عنها غير موجودة.",
+  loading: "جاري التحميل...",
+
+  adminDashboard: "لوحة التحكم",
+  overview: "نظرة عامة",
+  tourManager: "إدارة الرحلات",
+  bookings: "الحجوزات",
+  contentEditor: "محرر المحتوى",
+  viewPublicSite: "عرض الموقع",
+  settings: "الإعدادات",
+  signOut: "تسجيل الخروج",
+  language: "اللغة",
+}
+
+export type TranslationKey = keyof typeof en
+
+const translations: Record<Locale, Record<TranslationKey, string>> = { en, fr, ar }
+
+export function t(locale: Locale, key: TranslationKey): string {
+  return translations[locale]?.[key] ?? translations.en[key] ?? key
+}
