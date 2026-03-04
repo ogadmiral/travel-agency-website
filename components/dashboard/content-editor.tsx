@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import { Save, RotateCcw, Eye, Loader2 } from "lucide-react"
+import { ImageUpload } from "./image-upload"
 
 interface SiteContent {
   heroHeading: string
@@ -13,6 +14,12 @@ interface SiteContent {
   contactEmail: string
   contactAddress: string
   newsletterText: string
+  heroImage: string
+  heroInsetImage: string
+  aboutImage: string
+  logoImage: string
+  logoWidth: number
+  siteName: string
 }
 
 export function ContentEditor() {
@@ -65,7 +72,7 @@ export function ContentEditor() {
     if (originalContent) setContent(originalContent)
   }
 
-  const updateField = (field: keyof SiteContent, value: string) => {
+  const updateField = (field: keyof SiteContent, value: string | number) => {
     setContent((prev) => prev ? { ...prev, [field]: value } : prev)
     setSaved(false)
   }
@@ -105,6 +112,38 @@ export function ContentEditor() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {/* Logo / Branding */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-lg p-6 xl:col-span-2">
+          <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
+            <Eye className="w-4 h-4 text-terracotta" />Logo & Branding
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Site Name (fallback if no logo)</label>
+              <input type="text" value={content.siteName} onChange={(e) => updateField("siteName", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Dar Voyages" />
+            </div>
+            <ImageUpload value={content.logoImage} onChange={(url) => updateField("logoImage", url)} label="Logo Image" />
+            <div>
+              <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Logo Width (px)</label>
+              <input type="range" min="60" max="300" value={content.logoWidth} onChange={(e) => updateField("logoWidth", Number(e.target.value))} className="w-full accent-terracotta mt-2" />
+              <div className="flex justify-between text-xs text-muted-foreground font-sans mt-1">
+                <span>60px</span>
+                <span className="text-foreground font-medium">{content.logoWidth}px</span>
+                <span>300px</span>
+              </div>
+            </div>
+          </div>
+          {/* Preview */}
+          <div className="mt-4 p-4 rounded-lg bg-midnight flex items-center gap-4">
+            <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-sand/40">Preview:</p>
+            {content.logoImage ? (
+              <img src={content.logoImage} alt="Logo preview" style={{ width: content.logoWidth, height: 'auto' }} className="object-contain" />
+            ) : (
+              <span className="text-2xl tracking-tight text-sand" style={{ fontFamily: 'var(--font-playfair)' }}>{content.siteName || 'Dar Voyages'}</span>
+            )}
+          </div>
+        </motion.div>
+
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-lg p-6">
           <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
             <Eye className="w-4 h-4 text-terracotta" />Hero Section
@@ -121,6 +160,10 @@ export function ContentEditor() {
             <div>
               <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Subheading</label>
               <textarea value={content.heroSubheading} onChange={(e) => updateField("heroSubheading", e.target.value)} rows={3} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <ImageUpload value={content.heroImage} onChange={(url) => updateField("heroImage", url)} label="Hero Background" />
+              <ImageUpload value={content.heroInsetImage} onChange={(url) => updateField("heroInsetImage", url)} label="Hero Inset Photo" />
             </div>
           </div>
 
@@ -158,6 +201,7 @@ export function ContentEditor() {
               <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">About Text</label>
               <textarea value={content.aboutText} onChange={(e) => updateField("aboutText", e.target.value)} rows={4} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" />
             </div>
+            <ImageUpload value={content.aboutImage} onChange={(url) => updateField("aboutImage", url)} label="About Section Photo" />
           </div>
 
           <div className="border-t border-border mt-6 pt-6">

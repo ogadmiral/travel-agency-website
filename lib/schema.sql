@@ -35,7 +35,13 @@ CREATE TABLE IF NOT EXISTS site_content (
   contact_phone TEXT NOT NULL DEFAULT '',
   contact_email TEXT NOT NULL DEFAULT '',
   contact_address TEXT NOT NULL DEFAULT '',
-  newsletter_text TEXT NOT NULL DEFAULT ''
+  newsletter_text TEXT NOT NULL DEFAULT '',
+  hero_image TEXT NOT NULL DEFAULT '',
+  hero_inset_image TEXT NOT NULL DEFAULT '',
+  about_image TEXT NOT NULL DEFAULT '',
+  logo_image TEXT NOT NULL DEFAULT '',
+  logo_width INTEGER NOT NULL DEFAULT 160,
+  site_name TEXT NOT NULL DEFAULT 'Dar Voyages'
 );
 
 -- Inquiries table

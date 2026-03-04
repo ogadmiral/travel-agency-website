@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import { Pencil, Check, X, Plus, Trash2, Loader2 } from "lucide-react"
+import { ImageUpload } from "./image-upload"
 
 interface Tour {
   id: number
@@ -53,7 +54,7 @@ export function TourManager() {
 
   const startEdit = (tour: Tour) => {
     setEditingId(tour.id)
-    setEditData({ price: tour.price, nextDate: tour.nextDate, status: tour.status })
+    setEditData({ price: tour.price, nextDate: tour.nextDate, status: tour.status, image: tour.image, name: tour.name, destination: tour.destination, duration: tour.duration, subtitle: tour.subtitle, description: tour.description })
   }
 
   const saveEdit = async (id: number) => {
@@ -155,6 +156,7 @@ export function TourManager() {
             <input type="text" placeholder="Subtitle" value={newTour.subtitle} onChange={(e) => setNewTour({ ...newTour, subtitle: e.target.value })} className="bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
           </div>
           <textarea placeholder="Description" value={newTour.description} onChange={(e) => setNewTour({ ...newTour, description: e.target.value })} rows={2} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" />
+          <ImageUpload value={newTour.image || ""} onChange={(url) => setNewTour({ ...newTour, image: url })} label="Tour Image" />
           <div className="flex gap-2">
             <button onClick={handleAddTour} className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg font-sans text-sm hover:bg-green-700 transition-colors"><Check className="w-4 h-4" />Create</button>
             <button onClick={() => setShowAddForm(false)} className="inline-flex items-center gap-2 px-4 py-2 bg-muted text-muted-foreground rounded-lg font-sans text-sm hover:bg-muted/80 transition-colors"><X className="w-4 h-4" />Cancel</button>
@@ -168,6 +170,7 @@ export function TourManager() {
             <thead>
               <tr className="border-b border-border bg-muted/50">
                 <th className="text-left px-5 py-3 text-xs font-sans uppercase tracking-wider text-muted-foreground font-medium">Tour</th>
+                <th className="text-left px-5 py-3 text-xs font-sans uppercase tracking-wider text-muted-foreground font-medium">Image</th>
                 <th className="text-left px-5 py-3 text-xs font-sans uppercase tracking-wider text-muted-foreground font-medium">Destination</th>
                 <th className="text-left px-5 py-3 text-xs font-sans uppercase tracking-wider text-muted-foreground font-medium">Price</th>
                 <th className="text-left px-5 py-3 text-xs font-sans uppercase tracking-wider text-muted-foreground font-medium">Duration</th>
@@ -182,6 +185,13 @@ export function TourManager() {
                 return (
                   <motion.tr key={tour.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="hover:bg-muted/30 transition-colors">
                     <td className="px-5 py-4 font-sans text-sm font-medium text-foreground">{tour.name}</td>
+                    <td className="px-5 py-4">
+                      {isEditing ? (
+                        <ImageUpload value={editData.image || ""} onChange={(url) => setEditData({ ...editData, image: url })} label="" className="w-32" />
+                      ) : (
+                        tour.image ? <img src={tour.image} alt={tour.name} className="w-16 h-10 object-cover rounded" /> : <span className="text-xs text-muted-foreground">No image</span>
+                      )}
+                    </td>
                     <td className="px-5 py-4 font-sans text-sm text-muted-foreground">{tour.destination}</td>
                     <td className="px-5 py-4 font-sans text-sm">
                       {isEditing ? (

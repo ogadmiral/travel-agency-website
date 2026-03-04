@@ -1,22 +1,51 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
 import { motion, useInView } from "framer-motion"
 import Image from "next/image"
 import { useLanguage } from "@/components/language-provider"
 import { t, type TranslationKey } from "@/lib/i18n"
 
-const destinations = [
+const defaultDestinations = [
   { nameKey: "marrakech" as TranslationKey, tagKey: "marrakechTag" as TranslationKey, image: "/images/hero-morocco.jpg" },
   { nameKey: "fes" as TranslationKey, tagKey: "fesTag" as TranslationKey, image: "/images/medina-streets.jpg" },
   { nameKey: "sahara" as TranslationKey, tagKey: "saharaTag" as TranslationKey, image: "/images/sahara-desert.jpg" },
   { nameKey: "essaouira" as TranslationKey, tagKey: "essaouiraTag" as TranslationKey, image: "/images/essaouira-coast.jpg" },
 ]
 
+// Map destination names to tour destinations for image lookup
+const destToTourMap: Record<string, string> = {
+  marrakech: "Multi-City",
+  fes: "Fes",
+  sahara: "Merzouga",
+  essaouira: "Essaouira",
+}
+
 export function DestinationsGrid() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const { locale } = useLanguage()
+  const [destinations, setDestinations] = useState(defaultDestinations)
+
+  const fetchTourImages = useCallback(async () => {
+    try {
+      const res = await fetch("/api/tours")
+      const tours = await res.json()
+      setDestinations((prev) =>
+        prev.map((dest) => {
+          const tourDest = destToTourMap[dest.nameKey]
+          const matchingTour = tours.find((tour: { destination: string; image: string }) => tour.destination === tourDest)
+          return matchingTour?.image ? { ...dest, image: matchingTour.image } : dest
+        })
+      )
+    } catch {
+      // fallback to defaults
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchTourImages()
+  }, [fetchTourImages])
 
   return (
     <section id="destinations" ref={ref} className="py-24 lg:py-32 bg-sand">

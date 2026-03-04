@@ -4,12 +4,18 @@ import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { useLanguage } from "@/components/language-provider"
+import { SiteLogo } from "@/components/site-logo"
 import { t } from "@/lib/i18n"
 
 interface SiteContent {
   heroHeading: string
   heroSubheading: string
   heroTagline: string
+  heroImage: string
+  heroInsetImage: string
+  logoImage: string
+  logoWidth: number
+  siteName: string
 }
 
 export function HeroSection() {
@@ -18,6 +24,11 @@ export function HeroSection() {
     heroHeading: "Discover the Soul of Morocco",
     heroSubheading: "Curated journeys through ancient medinas, vast Saharan dunes, and the Atlas Mountains. Every detail crafted for the discerning traveler.",
     heroTagline: "Luxury Moroccan Journeys",
+    heroImage: "/images/hero-morocco.jpg",
+    heroInsetImage: "/images/medina-streets.jpg",
+    logoImage: "",
+    logoWidth: 160,
+    siteName: "Dar Voyages",
   })
 
   const fetchContent = useCallback(async () => {
@@ -42,11 +53,12 @@ export function HeroSection() {
     <section id="hero" className="relative min-h-screen overflow-hidden bg-midnight">
       <div className="absolute inset-0">
         <Image
-          src="/images/hero-morocco.jpg"
+          src={content.heroImage || "/images/hero-morocco.jpg"}
           alt="Luxurious Moroccan riad courtyard at golden hour"
           fill
           className="object-cover"
           priority
+          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-b from-midnight/70 via-midnight/40 to-midnight/90" />
       </div>
@@ -58,9 +70,7 @@ export function HeroSection() {
           transition={{ delay: 0.2 }}
           className="absolute top-0 left-0 right-0 flex items-center justify-between p-6 lg:p-10"
         >
-          <span className="text-2xl lg:text-3xl tracking-tight text-sand" style={{ fontFamily: "var(--font-playfair)" }}>
-            Dar Voyages
-          </span>
+          <SiteLogo logoImage={content.logoImage} logoWidth={content.logoWidth} siteName={content.siteName} textClassName="text-2xl lg:text-3xl" variant="light" />
           <span className="text-xs font-sans uppercase tracking-[0.3em] text-sand/60">{t(locale, "est")}</span>
         </motion.div>
 
@@ -92,7 +102,7 @@ export function HeroSection() {
             className="hidden lg:block col-span-4 -mb-8 relative z-20"
           >
             <div className="arch-frame-tall w-48 h-72 xl:w-56 xl:h-80 ml-auto mr-8 relative">
-              <Image src="/images/medina-streets.jpg" alt="Colorful streets of a Moroccan medina" fill className="object-cover" />
+              <Image src={content.heroInsetImage || "/images/medina-streets.jpg"} alt="Colorful streets of a Moroccan medina" fill className="object-cover" unoptimized />
             </div>
           </motion.div>
         </div>

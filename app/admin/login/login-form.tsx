@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { SiteLogo } from "@/components/site-logo"
 
 export default function LoginForm() {
   const [username, setUsername] = useState("")
@@ -15,6 +16,13 @@ export default function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const from = searchParams.get("from") || "/admin"
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 160, siteName: "Dar Voyages" })
+
+  useEffect(() => {
+    fetch("/api/content").then(r => r.json()).then(data => {
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "Dar Voyages" })
+    }).catch(() => {})
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,12 +79,9 @@ export default function LoginForm() {
             <div className="w-14 h-14 rounded-full bg-terracotta/20 flex items-center justify-center mx-auto mb-4">
               <Lock className="w-6 h-6 text-terracotta" />
             </div>
-            <h1
-              className="text-3xl tracking-tight text-sand mb-2"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Dar Voyages
-            </h1>
+            <div className="mb-2">
+              <SiteLogo logoImage={logoData.logoImage} logoWidth={logoData.logoWidth} siteName={logoData.siteName} textClassName="text-3xl" variant="light" />
+            </div>
             <p className="text-xs font-sans uppercase tracking-[0.3em] text-sand/40">
               Admin Dashboard
             </p>

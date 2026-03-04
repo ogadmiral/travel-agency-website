@@ -4,10 +4,14 @@ import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import { useLanguage } from "@/components/language-provider"
 import { t } from "@/lib/i18n"
+import { SiteLogo } from "@/components/site-logo"
 
 interface SiteContent {
   contactEmail: string
   newsletterText: string
+  logoImage: string
+  logoWidth: number
+  siteName: string
 }
 
 export function Footer() {
@@ -15,6 +19,9 @@ export function Footer() {
   const [content, setContent] = useState<SiteContent>({
     contactEmail: "hello@darvoyages.com",
     newsletterText: "Receive curated travel stories and exclusive offers.",
+    logoImage: "",
+    logoWidth: 160,
+    siteName: "Dar Voyages",
   })
   const [subscribed, setSubscribed] = useState(false)
 
@@ -22,7 +29,7 @@ export function Footer() {
     try {
       const res = await fetch("/api/content")
       const data = await res.json()
-      setContent({ contactEmail: data.contactEmail, newsletterText: data.newsletterText })
+      setContent({ contactEmail: data.contactEmail, newsletterText: data.newsletterText, logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "Dar Voyages" })
     } catch {
       // fallback to defaults
     }
@@ -57,7 +64,7 @@ export function Footer() {
       <div className="px-6 lg:px-16">
         <div className="grid grid-cols-12 gap-8 lg:gap-12 mb-16">
           <div className="col-span-12 lg:col-span-4">
-            <span className="text-3xl tracking-tight text-sunset-orange block mb-4" style={{ fontFamily: "var(--font-playfair)" }}>Dar Voyages</span>
+            <SiteLogo logoImage={content.logoImage} logoWidth={content.logoWidth} siteName={content.siteName} textClassName="text-3xl block mb-4" variant="accent" />
             <p className="text-sand/50 font-sans text-sm leading-relaxed max-w-sm">
               {t(locale, "footerDescription")}
             </p>

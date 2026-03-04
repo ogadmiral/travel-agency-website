@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, MapPin, Compass, Phone, Calendar, Home } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/components/language-provider"
 import { t, type TranslationKey } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { SiteLogo } from "@/components/site-logo"
 
 const navItems = [
   { labelKey: "home" as TranslationKey, href: "#hero", icon: Home },
@@ -19,6 +20,17 @@ const navItems = [
 export function SideNavigation() {
   const [isOpen, setIsOpen] = useState(false)
   const { locale } = useLanguage()
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 160, siteName: "Dar Voyages" })
+
+  const fetchLogo = useCallback(async () => {
+    try {
+      const res = await fetch("/api/content")
+      const data = await res.json()
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "Dar Voyages" })
+    } catch {}
+  }, [])
+
+  useEffect(() => { fetchLogo() }, [fetchLogo])
 
   return (
     <>
@@ -53,9 +65,7 @@ export function SideNavigation() {
               className="fixed left-0 top-0 bottom-0 w-full max-w-md z-50 bg-midnight text-primary-foreground flex flex-col"
             >
               <div className="flex items-center justify-between p-8">
-                <span className="font-serif text-2xl tracking-tight text-sunset-orange" style={{ fontFamily: 'var(--font-playfair)' }}>
-                  Dar Voyages
-                </span>
+                <SiteLogo logoImage={logoData.logoImage} logoWidth={logoData.logoWidth} siteName={logoData.siteName} textClassName="text-2xl" variant="accent" />
                 <button
                   onClick={() => setIsOpen(false)}
                   className="p-2 hover:bg-white/10 rounded-full transition-colors"

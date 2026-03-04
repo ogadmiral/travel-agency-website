@@ -20,12 +20,14 @@ export function AboutSection() {
   const [aboutText, setAboutText] = useState(
     "Born from a deep love for Morocco and its people, Dar Voyages creates journeys that go beyond tourism. We open doors to private riads, family kitchens, and hidden valleys that most travelers never discover."
   )
+  const [aboutImage, setAboutImage] = useState("/images/luxury-riad.jpg")
 
   const fetchContent = useCallback(async () => {
     try {
       const res = await fetch("/api/content")
       const data = await res.json()
       if (data.aboutText) setAboutText(data.aboutText)
+      if (data.aboutImage) setAboutImage(data.aboutImage)
     } catch {
       // fallback to default
     }
@@ -46,7 +48,7 @@ export function AboutSection() {
             className="col-span-12 lg:col-span-5"
           >
             <div className="arch-frame-tall w-full max-w-sm mx-auto lg:mx-0 h-[450px] lg:h-[560px] relative">
-              <Image src="/images/luxury-riad.jpg" alt="Luxurious Moroccan riad interior with Moorish arches" fill className="object-cover" />
+              <Image src={aboutImage} alt="Luxurious Moroccan riad interior with Moorish arches" fill className="object-cover" unoptimized />
             </div>
           </motion.div>
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { DashboardSidebar } from "./dashboard-sidebar"
 import { OverviewPanel } from "./overview-panel"
 import { TourManager } from "./tour-manager"
@@ -8,12 +8,24 @@ import { BookingsFeed } from "./bookings-feed"
 import { ContentEditor } from "./content-editor"
 import { Menu, X } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
+import { SiteLogo } from "@/components/site-logo"
 
 type View = "overview" | "tours" | "bookings" | "content"
 
 export function DashboardShell() {
   const [activeView, setActiveView] = useState<View>("overview")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 120, siteName: "Dar Voyages" })
+
+  const fetchLogo = useCallback(async () => {
+    try {
+      const res = await fetch("/api/content")
+      const data = await res.json()
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: Math.min(data.logoWidth || 120, 120), siteName: data.siteName || "Dar Voyages" })
+    } catch {}
+  }, [])
+
+  useEffect(() => { fetchLogo() }, [fetchLogo])
 
   const renderView = () => {
     switch (activeView) {
@@ -37,12 +49,7 @@ export function DashboardShell() {
 
       {/* Mobile header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-        <span
-          className="text-lg tracking-tight text-foreground"
-          style={{ fontFamily: 'var(--font-playfair)' }}
-        >
-          Dar Voyages
-        </span>
+        <SiteLogo logoImage={logoData.logoImage} logoWidth={logoData.logoWidth} siteName={logoData.siteName} textClassName="text-lg" variant="dark" />
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-2 hover:bg-muted rounded-lg transition-colors"

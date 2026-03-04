@@ -15,6 +15,8 @@ import Link from "next/link"
 import { useLanguage } from "@/components/language-provider"
 import { t, type TranslationKey } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { SiteLogo } from "@/components/site-logo"
+import { useState, useEffect, useCallback } from "react"
 
 type View = "overview" | "tours" | "bookings" | "content"
 
@@ -33,6 +35,17 @@ const navItems: { labelKey: TranslationKey; icon: typeof LayoutDashboard; view: 
 export function DashboardSidebar({ activeView, onViewChange }: DashboardSidebarProps) {
   const router = useRouter()
   const { locale } = useLanguage()
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 140, siteName: "Dar Voyages" })
+
+  const fetchLogo = useCallback(async () => {
+    try {
+      const res = await fetch("/api/content")
+      const data = await res.json()
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: Math.min(data.logoWidth || 140, 140), siteName: data.siteName || "Dar Voyages" })
+    } catch {}
+  }, [])
+
+  useEffect(() => { fetchLogo() }, [fetchLogo])
 
   const handleSignOut = async () => {
     try {
@@ -52,12 +65,7 @@ export function DashboardSidebar({ activeView, onViewChange }: DashboardSidebarP
       <div className="relative z-10 flex flex-col h-full">
         {/* Logo */}
         <div className="p-6 pb-2">
-          <span
-            className="text-xl tracking-tight text-white/90"
-            style={{ fontFamily: 'var(--font-playfair)' }}
-          >
-            Dar Voyages
-          </span>
+          <SiteLogo logoImage={logoData.logoImage} logoWidth={logoData.logoWidth} siteName={logoData.siteName} textClassName="text-xl" variant="light" />
           <p className="text-[10px] font-sans uppercase tracking-[0.3em] text-white/40 mt-1">
             {t(locale, "adminDashboard")}
           </p>
