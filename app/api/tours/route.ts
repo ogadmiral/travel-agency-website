@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
 import { getTours, createTour } from "@/lib/data"
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   try {
-    const tours = getTours()
+    const tours = await getTours()
     return NextResponse.json(tours)
   } catch {
     return NextResponse.json({ error: "Failed to fetch tours" }, { status: 500 })
@@ -13,7 +15,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const tour = createTour(body)
+    const tour = await createTour(body)
     return NextResponse.json(tour, { status: 201 })
   } catch {
     return NextResponse.json({ error: "Failed to create tour" }, { status: 500 })

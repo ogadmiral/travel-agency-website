@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    const tour = getTourById(Number(id))
+    const tour = await getTourById(Number(id))
     if (!tour) {
       return NextResponse.json({ error: "Tour not found" }, { status: 404 })
     }
@@ -24,7 +24,7 @@ export async function PUT(
   try {
     const { id } = await params
     const body = await request.json()
-    const tour = updateTour(Number(id), body)
+    const tour = await updateTour(Number(id), body)
     if (!tour) {
       return NextResponse.json({ error: "Tour not found" }, { status: 404 })
     }
@@ -40,7 +40,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
-    const deleted = deleteTour(Number(id))
+    const deleted = await deleteTour(Number(id))
     if (!deleted) {
       return NextResponse.json({ error: "Tour not found" }, { status: 404 })
     }

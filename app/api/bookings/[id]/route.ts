@@ -8,7 +8,7 @@ export async function PUT(
   try {
     const { id } = await params
     const body = await request.json()
-    const booking = updateBookingStatus(Number(id), body.status)
+    const booking = await updateBookingStatus(Number(id), body.status)
     if (!booking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 })
     }

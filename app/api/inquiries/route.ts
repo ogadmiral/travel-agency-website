@@ -4,7 +4,7 @@ import { createInquiry } from "@/lib/data"
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const inquiry = createInquiry({
+    const inquiry = await createInquiry({
       ...body,
       submittedAt: new Date().toISOString(),
     })
