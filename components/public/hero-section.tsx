@@ -12,7 +12,6 @@ interface SiteContent {
   heroSubheading: string
   heroTagline: string
   heroImage: string
-  heroInsetImage: string
   logoImage: string
   logoWidth: number
   siteName: string
@@ -25,7 +24,6 @@ export function HeroSection() {
     heroSubheading: "Curated journeys through ancient medinas, vast Saharan dunes, and the Atlas Mountains. Every detail crafted for the discerning traveler.",
     heroTagline: "Luxury Moroccan Journeys",
     heroImage: "/images/hero-morocco.jpg",
-    heroInsetImage: "/images/medina-streets.jpg",
     logoImage: "",
     logoWidth: 160,
     siteName: "Dar Voyages",
@@ -79,7 +77,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="col-span-12 lg:col-span-8"
+            className="col-span-12"
           >
             <p className="text-xs font-sans uppercase tracking-[0.4em] text-sunset-orange mb-4 lg:mb-6">
               {t(locale, "heroTagline")}
@@ -95,16 +93,6 @@ export function HeroSection() {
             </h1>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            className="hidden lg:block col-span-4 -mb-8 relative z-20"
-          >
-            <div className="arch-frame-tall w-48 h-72 xl:w-56 xl:h-80 ml-auto mr-8 relative">
-              <Image src={content.heroInsetImage || "/images/medina-streets.jpg"} alt="Colorful streets of a Moroccan medina" fill className="object-cover" unoptimized />
-            </div>
-          </motion.div>
         </div>
 
         <motion.div

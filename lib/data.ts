@@ -125,7 +125,6 @@ export interface SiteContent {
   contactAddress: string
   newsletterText: string
   heroImage: string
-  heroInsetImage: string
   aboutImage: string
   logoImage: string
   logoWidth: number
@@ -143,7 +142,6 @@ function rowToContent(row: Record<string, unknown>): SiteContent {
     contactAddress: row.contact_address as string,
     newsletterText: row.newsletter_text as string,
     heroImage: (row.hero_image as string) || "",
-    heroInsetImage: (row.hero_inset_image as string) || "",
     aboutImage: (row.about_image as string) || "",
     logoImage: (row.logo_image as string) || "",
     logoWidth: (row.logo_width as number) || 160,
@@ -165,7 +163,6 @@ export async function getSiteContent(): Promise<SiteContent> {
     contactAddress: "",
     newsletterText: "",
     heroImage: "",
-    heroInsetImage: "",
     aboutImage: "",
     logoImage: "",
     logoWidth: 160,
@@ -175,15 +172,15 @@ export async function getSiteContent(): Promise<SiteContent> {
 
 export async function updateSiteContent(content: SiteContent): Promise<SiteContent> {
   const { rows } = await pool.query(
-    `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, hero_inset_image, about_image, logo_image, logo_width, site_name)
-     VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+    `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name)
+     VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
      ON CONFLICT (id) DO UPDATE SET
        hero_heading=$1, hero_subheading=$2, hero_tagline=$3, about_text=$4,
        contact_phone=$5, contact_email=$6, contact_address=$7, newsletter_text=$8,
-       hero_image=$9, hero_inset_image=$10, about_image=$11,
-       logo_image=$12, logo_width=$13, site_name=$14
+       hero_image=$9, about_image=$10,
+       logo_image=$11, logo_width=$12, site_name=$13
      RETURNING *`,
-    [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.heroInsetImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "Dar Voyages"]
+    [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "Dar Voyages"]
   )
   return rowToContent(rows[0])
 }

@@ -15,7 +15,6 @@ interface SiteContent {
   contactAddress: string
   newsletterText: string
   heroImage: string
-  heroInsetImage: string
   aboutImage: string
   logoImage: string
   logoWidth: number
@@ -161,9 +160,8 @@ export function ContentEditor() {
               <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Subheading</label>
               <textarea value={content.heroSubheading} onChange={(e) => updateField("heroSubheading", e.target.value)} rows={3} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div>
               <ImageUpload value={content.heroImage} onChange={(url) => updateField("heroImage", url)} label="Hero Background" />
-              <ImageUpload value={content.heroInsetImage} onChange={(url) => updateField("heroInsetImage", url)} label="Hero Inset Photo" />
             </div>
           </div>
 
