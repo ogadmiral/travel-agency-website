@@ -16,11 +16,11 @@ export default function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const from = searchParams.get("from") || "/admin"
-  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 160, siteName: "Dar Voyages" })
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 160, siteName: "" })
 
   useEffect(() => {
     fetch("/api/content").then(r => r.json()).then(data => {
-      setLogoData({ logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "Dar Voyages" })
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "" })
     }).catch(() => {})
   }, [])
 

@@ -12,16 +12,20 @@ interface SiteContent {
   logoImage: string
   logoWidth: number
   siteName: string
+  footerDescription: string
+  copyrightText: string
 }
 
 export function Footer() {
   const { locale } = useLanguage()
   const [content, setContent] = useState<SiteContent>({
-    contactEmail: "hello@darvoyages.com",
+    contactEmail: "",
     newsletterText: "Receive curated travel stories and exclusive offers.",
     logoImage: "",
     logoWidth: 160,
-    siteName: "Dar Voyages",
+    siteName: "",
+    footerDescription: "",
+    copyrightText: "",
   })
   const [subscribed, setSubscribed] = useState(false)
 
@@ -29,7 +33,7 @@ export function Footer() {
     try {
       const res = await fetch("/api/content")
       const data = await res.json()
-      setContent({ contactEmail: data.contactEmail, newsletterText: data.newsletterText, logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "Dar Voyages" })
+      setContent({ contactEmail: data.contactEmail, newsletterText: data.newsletterText, logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "", footerDescription: data.footerDescription || "", copyrightText: data.copyrightText || "" })
     } catch {
       // fallback to defaults
     }
@@ -66,7 +70,7 @@ export function Footer() {
           <div className="col-span-12 lg:col-span-4">
             <SiteLogo logoImage={content.logoImage} logoWidth={content.logoWidth} siteName={content.siteName} textClassName="text-3xl block mb-4" variant="accent" />
             <p className="text-sand/50 font-sans text-sm leading-relaxed max-w-sm">
-              {t(locale, "footerDescription")}
+              {content.footerDescription || t(locale, "footerDescription")}
             </p>
           </div>
 
@@ -103,10 +107,14 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col lg:flex-row items-center justify-between gap-4">
-          <p className="text-xs font-sans text-sand/30">{t(locale, "copyright")}</p>
+          <p className="text-xs font-sans text-sand/30">{content.copyrightText || t(locale, "copyright")}</p>
           <div className="flex gap-6">
-            {["Instagram", "Facebook", "Pinterest", "LinkedIn"].map((social) => (
-              <a key={social} href="#" className="text-xs font-sans text-sand/30 hover:text-sunset-orange transition-colors">{social}</a>
+            {[
+              { label: "Facebook", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== "undefined" ? window.location.origin : "")}` },
+              { label: "Pinterest", url: `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.origin : "")}` },
+              { label: "LinkedIn", url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.origin : "")}` },
+            ].map((social) => (
+              <a key={social.label} href={social.url} target="_blank" rel="noopener noreferrer" className="text-xs font-sans text-sand/30 hover:text-sunset-orange transition-colors">{social.label}</a>
             ))}
           </div>
         </div>

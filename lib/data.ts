@@ -129,6 +129,11 @@ export interface SiteContent {
   logoImage: string
   logoWidth: number
   siteName: string
+  metaTitle: string
+  metaDescription: string
+  footerDescription: string
+  copyrightText: string
+  marqueeItems: string
 }
 
 function rowToContent(row: Record<string, unknown>): SiteContent {
@@ -145,7 +150,12 @@ function rowToContent(row: Record<string, unknown>): SiteContent {
     aboutImage: (row.about_image as string) || "",
     logoImage: (row.logo_image as string) || "",
     logoWidth: (row.logo_width as number) || 160,
-    siteName: (row.site_name as string) || "Dar Voyages",
+    siteName: (row.site_name as string) || "",
+    metaTitle: (row.meta_title as string) || "",
+    metaDescription: (row.meta_description as string) || "",
+    footerDescription: (row.footer_description as string) || "",
+    copyrightText: (row.copyright_text as string) || "",
+    marqueeItems: (row.marquee_items as string) || "",
   }
 }
 
@@ -166,21 +176,27 @@ export async function getSiteContent(): Promise<SiteContent> {
     aboutImage: "",
     logoImage: "",
     logoWidth: 160,
-    siteName: "Dar Voyages",
+    siteName: "",
+    metaTitle: "",
+    metaDescription: "",
+    footerDescription: "",
+    copyrightText: "",
+    marqueeItems: "",
   }
 }
 
 export async function updateSiteContent(content: SiteContent): Promise<SiteContent> {
   const { rows } = await pool.query(
-    `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name)
-     VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+    `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name, meta_title, meta_description, footer_description, copyright_text, marquee_items)
+     VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
      ON CONFLICT (id) DO UPDATE SET
        hero_heading=$1, hero_subheading=$2, hero_tagline=$3, about_text=$4,
        contact_phone=$5, contact_email=$6, contact_address=$7, newsletter_text=$8,
        hero_image=$9, about_image=$10,
-       logo_image=$11, logo_width=$12, site_name=$13
+       logo_image=$11, logo_width=$12, site_name=$13,
+       meta_title=$14, meta_description=$15, footer_description=$16, copyright_text=$17, marquee_items=$18
      RETURNING *`,
-    [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "Dar Voyages"]
+    [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "", content.metaTitle || "", content.metaDescription || "", content.footerDescription || "", content.copyrightText || "", content.marqueeItems || ""]
   )
   return rowToContent(rows[0])
 }

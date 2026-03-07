@@ -15,13 +15,13 @@ type View = "overview" | "tours" | "bookings" | "content"
 export function DashboardShell() {
   const [activeView, setActiveView] = useState<View>("overview")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 120, siteName: "Dar Voyages" })
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 120, siteName: "" })
 
   const fetchLogo = useCallback(async () => {
     try {
       const res = await fetch("/api/content")
       const data = await res.json()
-      setLogoData({ logoImage: data.logoImage || "", logoWidth: Math.min(data.logoWidth || 120, 120), siteName: data.siteName || "Dar Voyages" })
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: Math.min(data.logoWidth || 120, 120), siteName: data.siteName || "" })
     } catch {}
   }, [])
 

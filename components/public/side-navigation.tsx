@@ -20,13 +20,13 @@ const navItems = [
 export function SideNavigation() {
   const [isOpen, setIsOpen] = useState(false)
   const { locale } = useLanguage()
-  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 160, siteName: "Dar Voyages" })
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 160, siteName: "" })
 
   const fetchLogo = useCallback(async () => {
     try {
       const res = await fetch("/api/content")
       const data = await res.json()
-      setLogoData({ logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "Dar Voyages" })
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "" })
     } catch {}
   }, [])
 
@@ -103,9 +103,9 @@ export function SideNavigation() {
                   <LanguageSwitcher variant="dark" />
                 </div>
                 <div className="flex gap-6 text-sm text-white/60">
-                  <span className="hover:text-sunset-orange transition-colors cursor-pointer">Instagram</span>
-                  <span className="hover:text-sunset-orange transition-colors cursor-pointer">Facebook</span>
-                  <span className="hover:text-sunset-orange transition-colors cursor-pointer">Pinterest</span>
+                  <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== "undefined" ? window.location.origin : "")}`} target="_blank" rel="noopener noreferrer" className="hover:text-sunset-orange transition-colors cursor-pointer">Facebook</a>
+                  <a href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.origin : "")}`} target="_blank" rel="noopener noreferrer" className="hover:text-sunset-orange transition-colors cursor-pointer">Pinterest</a>
+                  <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.origin : "")}`} target="_blank" rel="noopener noreferrer" className="hover:text-sunset-orange transition-colors cursor-pointer">LinkedIn</a>
                 </div>
               </div>
             </motion.nav>

@@ -1,8 +1,9 @@
 "use client"
 
+import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 
-const items = [
+const defaultItems = [
   "Marrakech",
   "Fes",
   "Sahara Desert",
@@ -16,6 +17,24 @@ const items = [
 ]
 
 export function MarqueeTicker() {
+  const [items, setItems] = useState(defaultItems)
+
+  const fetchItems = useCallback(async () => {
+    try {
+      const res = await fetch("/api/content")
+      const data = await res.json()
+      if (data.marqueeItems && data.marqueeItems.trim()) {
+        setItems(data.marqueeItems.split(",").map((s: string) => s.trim()).filter(Boolean))
+      }
+    } catch {
+      // fallback to defaults
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchItems()
+  }, [fetchItems])
+
   const repeated = [...items, ...items, ...items]
 
   return (

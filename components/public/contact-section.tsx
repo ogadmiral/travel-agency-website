@@ -20,7 +20,7 @@ export function ContactSection() {
   const { locale } = useLanguage()
   const [contactInfo, setContactInfo] = useState<SiteContent>({
     contactPhone: "+212 524 123 456",
-    contactEmail: "hello@darvoyages.com",
+    contactEmail: "",
     contactAddress: "42 Avenue Mohammed V, Marrakech, Morocco 40000",
   })
   const [tours, setTours] = useState<{ name: string }[]>([])

@@ -86,8 +86,8 @@ const en = {
   joinBtn: "Join",
   enterEmail: "Enter email",
   thankYouSubscribing: "Thank you for subscribing!",
-  copyright: "2026 Dar Voyages. All rights reserved.",
-  footerDescription: "Curating extraordinary Moroccan journeys since 2018. Every detail crafted for the discerning traveler.",
+  copyright: "All rights reserved.",
+  footerDescription: "Curating extraordinary Moroccan journeys. Every detail crafted for the discerning traveler.",
 
   // Side Navigation
   home: "Home",
@@ -182,8 +182,8 @@ const fr: typeof en = {
   joinBtn: "Rejoindre",
   enterEmail: "Entrez votre e-mail",
   thankYouSubscribing: "Merci de votre inscription !",
-  copyright: "2026 Dar Voyages. Tous droits réservés.",
-  footerDescription: "Des voyages marocains extraordinaires depuis 2018. Chaque détail conçu pour le voyageur exigeant.",
+  copyright: "Tous droits réservés.",
+  footerDescription: "Des voyages marocains extraordinaires. Chaque détail conçu pour le voyageur exigeant.",
 
   home: "Accueil",
   about: "À Propos",
@@ -275,8 +275,8 @@ const ar: typeof en = {
   joinBtn: "اشترك",
   enterEmail: "أدخل بريدك الإلكتروني",
   thankYouSubscribing: "شكراً لاشتراكك!",
-  copyright: "2026 دار فوياج. جميع الحقوق محفوظة.",
-  footerDescription: "رحلات مغربية استثنائية منذ 2018. كل تفصيل مصمم للمسافر المتميز.",
+  copyright: "جميع الحقوق محفوظة.",
+  footerDescription: "رحلات مغربية استثنائية. كل تفصيل مصمم للمسافر المتميز.",
 
   home: "الرئيسية",
   about: "من نحن",

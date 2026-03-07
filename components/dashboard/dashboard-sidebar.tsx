@@ -35,13 +35,13 @@ const navItems: { labelKey: TranslationKey; icon: typeof LayoutDashboard; view: 
 export function DashboardSidebar({ activeView, onViewChange }: DashboardSidebarProps) {
   const router = useRouter()
   const { locale } = useLanguage()
-  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 140, siteName: "Dar Voyages" })
+  const [logoData, setLogoData] = useState({ logoImage: "", logoWidth: 140, siteName: "" })
 
   const fetchLogo = useCallback(async () => {
     try {
       const res = await fetch("/api/content")
       const data = await res.json()
-      setLogoData({ logoImage: data.logoImage || "", logoWidth: Math.min(data.logoWidth || 140, 140), siteName: data.siteName || "Dar Voyages" })
+      setLogoData({ logoImage: data.logoImage || "", logoWidth: Math.min(data.logoWidth || 140, 140), siteName: data.siteName || "" })
     } catch {}
   }, [])
 

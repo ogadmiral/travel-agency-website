@@ -41,7 +41,12 @@ CREATE TABLE IF NOT EXISTS site_content (
   about_image TEXT NOT NULL DEFAULT '',
   logo_image TEXT NOT NULL DEFAULT '',
   logo_width INTEGER NOT NULL DEFAULT 160,
-  site_name TEXT NOT NULL DEFAULT 'Dar Voyages'
+  site_name TEXT NOT NULL DEFAULT '',
+  meta_title TEXT NOT NULL DEFAULT '',
+  meta_description TEXT NOT NULL DEFAULT '',
+  footer_description TEXT NOT NULL DEFAULT '',
+  copyright_text TEXT NOT NULL DEFAULT '',
+  marquee_items TEXT NOT NULL DEFAULT ''
 );
 
 -- Inquiries table

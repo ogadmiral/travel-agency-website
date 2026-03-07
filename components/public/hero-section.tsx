@@ -26,7 +26,7 @@ export function HeroSection() {
     heroImage: "/images/hero-morocco.jpg",
     logoImage: "",
     logoWidth: 160,
-    siteName: "Dar Voyages",
+    siteName: "",
   })
 
   const fetchContent = useCallback(async () => {
@@ -69,7 +69,6 @@ export function HeroSection() {
           className="absolute top-0 left-0 right-0 flex items-center justify-between p-6 lg:p-10"
         >
           <SiteLogo logoImage={content.logoImage} logoWidth={content.logoWidth} siteName={content.siteName} textClassName="text-2xl lg:text-3xl" variant="light" />
-          <span className="text-xs font-sans uppercase tracking-[0.3em] text-sand/60">{t(locale, "est")}</span>
         </motion.div>
 
         <div className="grid grid-cols-12 gap-4 items-end">

@@ -18,7 +18,7 @@ export function AboutSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const { locale } = useLanguage()
   const [aboutText, setAboutText] = useState(
-    "Born from a deep love for Morocco and its people, Dar Voyages creates journeys that go beyond tourism. We open doors to private riads, family kitchens, and hidden valleys that most travelers never discover."
+    "Born from a deep love for Morocco and its people, we create journeys that go beyond tourism. We open doors to private riads, family kitchens, and hidden valleys that most travelers never discover."
   )
   const [aboutImage, setAboutImage] = useState("/images/luxury-riad.jpg")
 

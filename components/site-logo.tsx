@@ -14,7 +14,7 @@ interface SiteLogoProps {
 export function SiteLogo({
   logoImage,
   logoWidth = 160,
-  siteName = "Dar Voyages",
+  siteName = "",
   className = "",
   textClassName = "",
   variant = "light",

@@ -19,6 +19,11 @@ interface SiteContent {
   logoImage: string
   logoWidth: number
   siteName: string
+  metaTitle: string
+  metaDescription: string
+  footerDescription: string
+  copyrightText: string
+  marqueeItems: string
 }
 
 export function ContentEditor() {
@@ -119,7 +124,7 @@ export function ContentEditor() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Site Name (fallback if no logo)</label>
-              <input type="text" value={content.siteName} onChange={(e) => updateField("siteName", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Dar Voyages" />
+              <input type="text" value={content.siteName} onChange={(e) => updateField("siteName", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Your Site Name" />
             </div>
             <ImageUpload value={content.logoImage} onChange={(url) => updateField("logoImage", url)} label="Logo Image" />
             <div>
@@ -138,8 +143,25 @@ export function ContentEditor() {
             {content.logoImage ? (
               <img src={content.logoImage} alt="Logo preview" style={{ width: content.logoWidth, height: 'auto' }} className="object-contain" />
             ) : (
-              <span className="text-2xl tracking-tight text-sand" style={{ fontFamily: 'var(--font-playfair)' }}>{content.siteName || 'Dar Voyages'}</span>
+              <span className="text-2xl tracking-tight text-sand" style={{ fontFamily: 'var(--font-playfair)' }}>{content.siteName || ''}</span>
             )}
+          </div>
+        </motion.div>
+
+        {/* SEO / Page Title */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-lg p-6 xl:col-span-2">
+          <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
+            <Eye className="w-4 h-4 text-terracotta" />SEO & Page Title
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Page Title (browser tab & search results)</label>
+              <input type="text" value={content.metaTitle} onChange={(e) => updateField("metaTitle", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="My Travel Agency | Luxury Tours" />
+            </div>
+            <div>
+              <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Meta Description (search results snippet)</label>
+              <textarea value={content.metaDescription} onChange={(e) => updateField("metaDescription", e.target.value)} rows={2} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" placeholder="Curated luxury travel experiences across Morocco." />
+            </div>
           </div>
         </motion.div>
 
@@ -209,6 +231,32 @@ export function ContentEditor() {
             <div>
               <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Newsletter Description</label>
               <input type="text" value={content.newsletterText} onChange={(e) => updateField("newsletterText", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
+            </div>
+          </div>
+
+          <div className="border-t border-border mt-6 pt-6">
+            <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
+              <Eye className="w-4 h-4 text-terracotta" />Footer
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Footer Description</label>
+                <textarea value={content.footerDescription} onChange={(e) => updateField("footerDescription", e.target.value)} rows={2} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" placeholder="A brief description shown in the footer" />
+              </div>
+              <div>
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Copyright Text</label>
+                <input type="text" value={content.copyrightText} onChange={(e) => updateField("copyrightText", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="2026 Your Company. All rights reserved." />
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-border mt-6 pt-6">
+            <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
+              <Eye className="w-4 h-4 text-terracotta" />Marquee Ticker
+            </h3>
+            <div>
+              <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Ticker Items (comma-separated)</label>
+              <input type="text" value={content.marqueeItems} onChange={(e) => updateField("marqueeItems", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Marrakech, Fes, Sahara Desert, Essaouira" />
             </div>
           </div>
         </motion.div>
