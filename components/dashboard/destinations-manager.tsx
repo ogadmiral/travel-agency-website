@@ -25,10 +25,12 @@ export function DestinationsManager() {
   const fetchDestinations = useCallback(async () => {
     try {
       const res = await fetch("/api/destinations")
+      if (!res.ok) throw new Error("API error")
       const data = await res.json()
-      setDestinations(data)
+      setDestinations(Array.isArray(data) ? data : [])
     } catch (err) {
       console.error("Failed to fetch destinations:", err)
+      setDestinations([])
     } finally {
       setLoading(false)
     }
