@@ -110,10 +110,10 @@ export function FeaturedExperiences() {
             <ChevronRight className="w-5 h-5" />
           </button>
           <div className="flex-1" />
-          <a href="#contact" className="inline-flex items-center gap-2 text-terracotta font-sans text-sm uppercase tracking-[0.2em] hover:gap-4 transition-all">
+          <Link href="/tours" className="inline-flex items-center gap-2 text-terracotta font-sans text-sm uppercase tracking-[0.2em] hover:gap-4 transition-all">
             {t(locale, "viewAll")}
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
