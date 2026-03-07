@@ -1,4 +1,4 @@
-import pool from "./db"
+import pool, { ensureMigrations } from "./db"
 
 // --- Tour types ---
 export interface Tour {
@@ -188,6 +188,7 @@ function rowToContent(row: Record<string, unknown>): SiteContent {
 }
 
 export async function getSiteContent(): Promise<SiteContent> {
+  await ensureMigrations()
   const { rows } = await pool.query("SELECT * FROM site_content WHERE id = 1")
   if (rows[0]) return rowToContent(rows[0])
   // Return defaults if no row exists
@@ -228,6 +229,7 @@ export async function getSiteContent(): Promise<SiteContent> {
 }
 
 export async function updateSiteContent(content: SiteContent): Promise<SiteContent> {
+  await ensureMigrations()
   const { rows } = await pool.query(
     `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name, meta_title, meta_description, footer_description, copyright_text, marquee_items, about_second_paragraph, destinations_heading, destinations_tagline, featured_heading, featured_tagline, featured_description, stat1_number, stat1_label, stat2_number, stat2_label, stat3_number, stat3_label, stat4_number, stat4_label)
      VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32)

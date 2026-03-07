@@ -46,6 +46,7 @@ export function ContentEditor() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState(false)
 
   const fetchContent = useCallback(async () => {
     try {
@@ -67,6 +68,7 @@ export function ContentEditor() {
   const handleSave = async () => {
     if (!content) return
     setSaving(true)
+    setSaveError(false)
     try {
       const res = await fetch("/api/content", {
         method: "PUT",
@@ -78,9 +80,15 @@ export function ContentEditor() {
         setOriginalContent(data)
         setSaved(true)
         setTimeout(() => setSaved(false), 2000)
+      } else {
+        console.error("Save failed with status:", res.status)
+        setSaveError(true)
+        setTimeout(() => setSaveError(false), 4000)
       }
     } catch (err) {
       console.error("Failed to save content:", err)
+      setSaveError(true)
+      setTimeout(() => setSaveError(false), 4000)
     } finally {
       setSaving(false)
     }
@@ -120,11 +128,11 @@ export function ContentEditor() {
             onClick={handleSave}
             disabled={saving}
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-sans text-sm transition-colors ${
-              saved ? "bg-green-600 text-white" : "bg-terracotta text-primary-foreground hover:bg-sunset-orange"
+              saveError ? "bg-red-600 text-white" : saved ? "bg-green-600 text-white" : "bg-terracotta text-primary-foreground hover:bg-sunset-orange"
             }`}
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {saved ? "Saved!" : saving ? "Saving..." : "Save Changes"}
+            {saveError ? "Save Failed!" : saved ? "Saved!" : saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
