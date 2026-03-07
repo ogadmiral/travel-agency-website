@@ -77,7 +77,7 @@ export function Footer() {
           <div className="col-span-6 lg:col-span-2 lg:col-start-6">
             <h5 className="text-xs font-sans uppercase tracking-[0.3em] text-sand/40 mb-4">{t(locale, "explore")}</h5>
             <ul className="space-y-3">
-              {[{ label: t(locale, "experiences"), href: "#experiences" }, { label: t(locale, "destinations"), href: "#destinations" }, { label: t(locale, "about"), href: "#about" }, { label: t(locale, "contact"), href: "#contact" }].map((item) => (
+              {[{ label: t(locale, "experiences"), href: "#experiences" }, { label: t(locale, "about"), href: "#about" }, { label: t(locale, "contact"), href: "#contact" }].map((item) => (
                 <li key={item.label}><a href={item.href} className="text-sm font-sans text-sand/60 hover:text-sunset-orange transition-colors">{item.label}</a></li>
               ))}
             </ul>

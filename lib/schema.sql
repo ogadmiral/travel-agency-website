@@ -52,7 +52,15 @@ CREATE TABLE IF NOT EXISTS site_content (
   destinations_tagline TEXT NOT NULL DEFAULT '',
   featured_heading TEXT NOT NULL DEFAULT '',
   featured_tagline TEXT NOT NULL DEFAULT '',
-  featured_description TEXT NOT NULL DEFAULT ''
+  featured_description TEXT NOT NULL DEFAULT '',
+  stat1_number TEXT NOT NULL DEFAULT '',
+  stat1_label TEXT NOT NULL DEFAULT '',
+  stat2_number TEXT NOT NULL DEFAULT '',
+  stat2_label TEXT NOT NULL DEFAULT '',
+  stat3_number TEXT NOT NULL DEFAULT '',
+  stat3_label TEXT NOT NULL DEFAULT '',
+  stat4_number TEXT NOT NULL DEFAULT '',
+  stat4_label TEXT NOT NULL DEFAULT ''
 );
 
 -- Destinations table

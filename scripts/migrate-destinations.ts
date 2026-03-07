@@ -40,6 +40,14 @@ async function migrate() {
       { name: "featured_heading", type: "TEXT NOT NULL DEFAULT ''" },
       { name: "featured_tagline", type: "TEXT NOT NULL DEFAULT ''" },
       { name: "featured_description", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat1_number", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat1_label", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat2_number", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat2_label", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat3_number", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat3_label", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat4_number", type: "TEXT NOT NULL DEFAULT ''" },
+      { name: "stat4_label", type: "TEXT NOT NULL DEFAULT ''" },
     ]
 
     for (const col of newColumns) {

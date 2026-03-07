@@ -30,6 +30,14 @@ interface SiteContent {
   featuredHeading: string
   featuredTagline: string
   featuredDescription: string
+  stat1Number: string
+  stat1Label: string
+  stat2Number: string
+  stat2Label: string
+  stat3Number: string
+  stat3Label: string
+  stat4Number: string
+  stat4Label: string
 }
 
 export function ContentEditor() {
@@ -256,16 +264,33 @@ export function ContentEditor() {
 
           <div className="border-t border-border mt-6 pt-6">
             <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
-              <Eye className="w-4 h-4 text-terracotta" />Destinations Section
+              <Eye className="w-4 h-4 text-terracotta" />About Stats
             </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Section Tagline</label>
-                <input type="text" value={content.destinationsTagline} onChange={(e) => updateField("destinationsTagline", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Where We Journey" />
+            <p className="text-xs text-muted-foreground font-sans mb-4">Customize the statistics displayed in the About section. Leave empty to use defaults.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2 p-3 bg-muted/50 rounded-lg">
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 1 Number</label>
+                <input type="text" value={content.stat1Number} onChange={(e) => updateField("stat1Number", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="200+" />
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 1 Label</label>
+                <input type="text" value={content.stat1Label} onChange={(e) => updateField("stat1Label", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Journeys Crafted" />
               </div>
-              <div>
-                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Section Heading</label>
-                <input type="text" value={content.destinationsHeading} onChange={(e) => updateField("destinationsHeading", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Iconic" />
+              <div className="space-y-2 p-3 bg-muted/50 rounded-lg">
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 2 Number</label>
+                <input type="text" value={content.stat2Number} onChange={(e) => updateField("stat2Number", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="15" />
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 2 Label</label>
+                <input type="text" value={content.stat2Label} onChange={(e) => updateField("stat2Label", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Years Experience" />
+              </div>
+              <div className="space-y-2 p-3 bg-muted/50 rounded-lg">
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 3 Number</label>
+                <input type="text" value={content.stat3Number} onChange={(e) => updateField("stat3Number", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="98%" />
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 3 Label</label>
+                <input type="text" value={content.stat3Label} onChange={(e) => updateField("stat3Label", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Guest Satisfaction" />
+              </div>
+              <div className="space-y-2 p-3 bg-muted/50 rounded-lg">
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 4 Number</label>
+                <input type="text" value={content.stat4Number} onChange={(e) => updateField("stat4Number", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="12" />
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Stat 4 Label</label>
+                <input type="text" value={content.stat4Label} onChange={(e) => updateField("stat4Label", e.target.value)} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Destinations" />
               </div>
             </div>
           </div>

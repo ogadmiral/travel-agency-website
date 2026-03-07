@@ -4,7 +4,6 @@ import { SideNavigation } from "./side-navigation"
 import { HeroSection } from "./hero-section"
 import { MarqueeTicker } from "./marquee-ticker"
 import { FeaturedExperiences } from "./featured-experiences"
-import { DestinationsGrid } from "./destinations-grid"
 import { AboutSection } from "./about-section"
 import { ContactSection } from "./contact-section"
 import { FloatingInquiry } from "./floating-inquiry"
@@ -21,7 +20,6 @@ export function PublicSite() {
       <HeroSection />
       <MarqueeTicker />
       <FeaturedExperiences />
-      <DestinationsGrid />
       <AboutSection />
       <ContactSection />
       <Footer />

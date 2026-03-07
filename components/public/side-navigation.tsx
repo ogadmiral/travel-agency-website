@@ -12,7 +12,6 @@ import { SiteLogo } from "@/components/site-logo"
 const navItems = [
   { labelKey: "home" as TranslationKey, href: "#hero", icon: Home },
   { labelKey: "experiences" as TranslationKey, href: "#experiences", icon: Compass },
-  { labelKey: "destinations" as TranslationKey, href: "#destinations", icon: MapPin },
   { labelKey: "about" as TranslationKey, href: "#about", icon: Calendar },
   { labelKey: "contact" as TranslationKey, href: "#contact", icon: Phone },
 ]

@@ -6,7 +6,7 @@ import Image from "next/image"
 import { useLanguage } from "@/components/language-provider"
 import { t, type TranslationKey } from "@/lib/i18n"
 
-const stats = [
+const defaultStats = [
   { number: "200+", labelKey: "journeysCrafted" as TranslationKey },
   { number: "15", labelKey: "yearsExperience" as TranslationKey },
   { number: "98%", labelKey: "guestSatisfaction" as TranslationKey },
@@ -22,6 +22,7 @@ export function AboutSection() {
   )
   const [aboutImage, setAboutImage] = useState("/images/luxury-riad.jpg")
   const [aboutSecondParagraph, setAboutSecondParagraph] = useState("")
+  const [stats, setStats] = useState<{ number: string; label: string }[]>([])
 
   const fetchContent = useCallback(async () => {
     try {
@@ -30,6 +31,14 @@ export function AboutSection() {
       if (data.aboutText) setAboutText(data.aboutText)
       if (data.aboutImage) setAboutImage(data.aboutImage)
       if (data.aboutSecondParagraph) setAboutSecondParagraph(data.aboutSecondParagraph)
+
+      // Build stats from API data, filtering out empty ones
+      const apiStats: { number: string; label: string }[] = []
+      if (data.stat1Number && data.stat1Label) apiStats.push({ number: data.stat1Number, label: data.stat1Label })
+      if (data.stat2Number && data.stat2Label) apiStats.push({ number: data.stat2Number, label: data.stat2Label })
+      if (data.stat3Number && data.stat3Label) apiStats.push({ number: data.stat3Number, label: data.stat3Label })
+      if (data.stat4Number && data.stat4Label) apiStats.push({ number: data.stat4Number, label: data.stat4Label })
+      if (apiStats.length > 0) setStats(apiStats)
     } catch {
       // fallback to default
     }
@@ -38,6 +47,11 @@ export function AboutSection() {
   useEffect(() => {
     fetchContent()
   }, [fetchContent])
+
+  // Use API stats if available, otherwise fall back to i18n defaults
+  const displayStats = stats.length > 0
+    ? stats.map((s) => ({ number: s.number, label: s.label }))
+    : defaultStats.map((s) => ({ number: s.number, label: t(locale, s.labelKey) }))
 
   return (
     <section id="about" ref={ref} className="py-24 lg:py-32 bg-background overflow-hidden">
@@ -72,10 +86,10 @@ export function AboutSection() {
             </div>
 
             <div className="grid grid-cols-2 gap-6 lg:gap-8">
-              {stats.map((stat, i) => (
-                <motion.div key={stat.labelKey} initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5 + i * 0.1 }} className="border-t border-border pt-4">
+              {displayStats.map((stat, i) => (
+                <motion.div key={`stat-${i}`} initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5 + i * 0.1 }} className="border-t border-border pt-4">
                   <span className="text-3xl lg:text-4xl text-terracotta tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>{stat.number}</span>
-                  <p className="text-xs font-sans uppercase tracking-[0.2em] text-muted-foreground mt-1">{t(locale, stat.labelKey)}</p>
+                  <p className="text-xs font-sans uppercase tracking-[0.2em] text-muted-foreground mt-1">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
