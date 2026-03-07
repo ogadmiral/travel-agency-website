@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import {
   LayoutDashboard,
   Map,
+  MapPin,
   CalendarCheck,
   FileEdit,
   ArrowLeft,
@@ -18,7 +19,7 @@ import { LanguageSwitcher } from "@/components/language-switcher"
 import { SiteLogo } from "@/components/site-logo"
 import { useState, useEffect, useCallback } from "react"
 
-type View = "overview" | "tours" | "bookings" | "content"
+type View = "overview" | "tours" | "bookings" | "content" | "destinations"
 
 interface DashboardSidebarProps {
   activeView: View
@@ -28,6 +29,7 @@ interface DashboardSidebarProps {
 const navItems: { labelKey: TranslationKey; icon: typeof LayoutDashboard; view: View }[] = [
   { labelKey: "overview", icon: LayoutDashboard, view: "overview" },
   { labelKey: "tourManager", icon: Map, view: "tours" },
+  { labelKey: "destinationsManager", icon: MapPin, view: "destinations" },
   { labelKey: "bookings", icon: CalendarCheck, view: "bookings" },
   { labelKey: "contentEditor", icon: FileEdit, view: "content" },
 ]

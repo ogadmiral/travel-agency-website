@@ -24,6 +24,12 @@ interface SiteContent {
   footerDescription: string
   copyrightText: string
   marqueeItems: string
+  aboutSecondParagraph: string
+  destinationsHeading: string
+  destinationsTagline: string
+  featuredHeading: string
+  featuredTagline: string
+  featuredDescription: string
 }
 
 export function ContentEditor() {
@@ -221,7 +227,47 @@ export function ContentEditor() {
               <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">About Text</label>
               <textarea value={content.aboutText} onChange={(e) => updateField("aboutText", e.target.value)} rows={4} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" />
             </div>
+            <div>
+              <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">About Second Paragraph</label>
+              <textarea value={content.aboutSecondParagraph} onChange={(e) => updateField("aboutSecondParagraph", e.target.value)} rows={4} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" placeholder="Every itinerary is handcrafted by our team..." />
+            </div>
             <ImageUpload value={content.aboutImage} onChange={(url) => updateField("aboutImage", url)} label="About Section Photo" />
+          </div>
+
+          <div className="border-t border-border mt-6 pt-6">
+            <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
+              <Eye className="w-4 h-4 text-terracotta" />Featured Experiences Section
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Section Tagline</label>
+                <input type="text" value={content.featuredTagline} onChange={(e) => updateField("featuredTagline", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Curated Collection" />
+              </div>
+              <div>
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Section Heading</label>
+                <input type="text" value={content.featuredHeading} onChange={(e) => updateField("featuredHeading", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Featured" />
+              </div>
+              <div>
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Description</label>
+                <textarea value={content.featuredDescription} onChange={(e) => updateField("featuredDescription", e.target.value)} rows={2} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" placeholder="Each journey is meticulously crafted..." />
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-border mt-6 pt-6">
+            <h3 className="text-sm font-semibold text-foreground font-sans mb-4 flex items-center gap-2">
+              <Eye className="w-4 h-4 text-terracotta" />Destinations Section
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Section Tagline</label>
+                <input type="text" value={content.destinationsTagline} onChange={(e) => updateField("destinationsTagline", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Where We Journey" />
+              </div>
+              <div>
+                <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Section Heading</label>
+                <input type="text" value={content.destinationsHeading} onChange={(e) => updateField("destinationsHeading", e.target.value)} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="Iconic" />
+              </div>
+            </div>
           </div>
 
           <div className="border-t border-border mt-6 pt-6">

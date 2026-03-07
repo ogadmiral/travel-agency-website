@@ -23,13 +23,27 @@ export function FeaturedExperiences() {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
   const [experiences, setExperiences] = useState<Experience[]>([])
   const { locale } = useLanguage()
+  const [sectionContent, setSectionContent] = useState({
+    featuredHeading: "",
+    featuredTagline: "",
+    featuredDescription: "",
+  })
 
   const fetchExperiences = useCallback(async () => {
     try {
-      const res = await fetch("/api/tours")
-      const data = await res.json()
+      const [toursRes, contentRes] = await Promise.all([
+        fetch("/api/tours"),
+        fetch("/api/content"),
+      ])
+      const data = await toursRes.json()
+      const contentData = await contentRes.json()
       // Only show Active tours on the public site
       setExperiences(data.filter((t: Experience & { status: string }) => t.status === "Active"))
+      setSectionContent({
+        featuredHeading: contentData.featuredHeading || "",
+        featuredTagline: contentData.featuredTagline || "",
+        featuredDescription: contentData.featuredDescription || "",
+      })
     } catch {
       // fallback empty
     }
@@ -56,9 +70,9 @@ export function FeaturedExperiences() {
             transition={{ duration: 0.6 }}
             className="col-span-12 lg:col-span-7"
           >
-            <p className="text-xs font-sans uppercase tracking-[0.4em] text-terracotta mb-4">{t(locale, "curatedCollection")}</p>
+            <p className="text-xs font-sans uppercase tracking-[0.4em] text-terracotta mb-4">{sectionContent.featuredTagline || t(locale, "curatedCollection")}</p>
             <h2 className="text-4xl md:text-5xl lg:text-6xl tracking-tight text-foreground leading-[1.05] text-balance" style={{ fontFamily: "var(--font-playfair)" }}>
-              {t(locale, "featured")} <span className="italic text-terracotta">{t(locale, "experiences")}</span>
+              {sectionContent.featuredHeading || t(locale, "featured")} <span className="italic text-terracotta">{t(locale, "experiences")}</span>
             </h2>
           </motion.div>
           <motion.div
@@ -68,7 +82,7 @@ export function FeaturedExperiences() {
             className="col-span-12 lg:col-span-4 lg:col-start-9 flex items-end"
           >
             <p className="text-muted-foreground font-sans leading-relaxed text-sm lg:text-base">
-              {t(locale, "featuredDescription")}
+              {sectionContent.featuredDescription || t(locale, "featuredDescription")}
             </p>
           </motion.div>
         </div>

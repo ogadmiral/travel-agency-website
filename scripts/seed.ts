@@ -92,6 +92,19 @@ async function seed() {
     await client.query(`SELECT setval('inquiries_id_seq', (SELECT COALESCE(MAX(id),0) FROM inquiries))`)
     console.log(`✅  Seeded ${inquiries.length} inquiries`)
 
+    // --- Seed destinations ---
+    const destinations = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "../data/destinations.json"), "utf-8")
+    )
+    for (const d of destinations) {
+      await client.query(
+        `INSERT INTO destinations (name, tagline, image, sort_order)
+         VALUES ($1,$2,$3,$4)`,
+        [d.name, d.tagline, d.image, d.sortOrder]
+      )
+    }
+    console.log(`✅  Seeded ${destinations.length} destinations`)
+
     console.log("\n🎉  Database seeded successfully!")
   } catch (err) {
     console.error("❌  Seed failed:", err)

@@ -21,6 +21,7 @@ export function AboutSection() {
     "Born from a deep love for Morocco and its people, we create journeys that go beyond tourism. We open doors to private riads, family kitchens, and hidden valleys that most travelers never discover."
   )
   const [aboutImage, setAboutImage] = useState("/images/luxury-riad.jpg")
+  const [aboutSecondParagraph, setAboutSecondParagraph] = useState("")
 
   const fetchContent = useCallback(async () => {
     try {
@@ -28,6 +29,7 @@ export function AboutSection() {
       const data = await res.json()
       if (data.aboutText) setAboutText(data.aboutText)
       if (data.aboutImage) setAboutImage(data.aboutImage)
+      if (data.aboutSecondParagraph) setAboutSecondParagraph(data.aboutSecondParagraph)
     } catch {
       // fallback to default
     }
@@ -65,7 +67,7 @@ export function AboutSection() {
             <div className="space-y-4 mb-10">
               <p className="text-muted-foreground font-sans leading-relaxed">{aboutText}</p>
               <p className="text-muted-foreground font-sans leading-relaxed">
-                {t(locale, "aboutSecondParagraph")}
+                {aboutSecondParagraph || t(locale, "aboutSecondParagraph")}
               </p>
             </div>
 

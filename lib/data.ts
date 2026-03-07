@@ -134,6 +134,12 @@ export interface SiteContent {
   footerDescription: string
   copyrightText: string
   marqueeItems: string
+  aboutSecondParagraph: string
+  destinationsHeading: string
+  destinationsTagline: string
+  featuredHeading: string
+  featuredTagline: string
+  featuredDescription: string
 }
 
 function rowToContent(row: Record<string, unknown>): SiteContent {
@@ -156,6 +162,12 @@ function rowToContent(row: Record<string, unknown>): SiteContent {
     footerDescription: (row.footer_description as string) || "",
     copyrightText: (row.copyright_text as string) || "",
     marqueeItems: (row.marquee_items as string) || "",
+    aboutSecondParagraph: (row.about_second_paragraph as string) || "",
+    destinationsHeading: (row.destinations_heading as string) || "",
+    destinationsTagline: (row.destinations_tagline as string) || "",
+    featuredHeading: (row.featured_heading as string) || "",
+    featuredTagline: (row.featured_tagline as string) || "",
+    featuredDescription: (row.featured_description as string) || "",
   }
 }
 
@@ -182,21 +194,29 @@ export async function getSiteContent(): Promise<SiteContent> {
     footerDescription: "",
     copyrightText: "",
     marqueeItems: "",
+    aboutSecondParagraph: "",
+    destinationsHeading: "",
+    destinationsTagline: "",
+    featuredHeading: "",
+    featuredTagline: "",
+    featuredDescription: "",
   }
 }
 
 export async function updateSiteContent(content: SiteContent): Promise<SiteContent> {
   const { rows } = await pool.query(
-    `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name, meta_title, meta_description, footer_description, copyright_text, marquee_items)
-     VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+    `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name, meta_title, meta_description, footer_description, copyright_text, marquee_items, about_second_paragraph, destinations_heading, destinations_tagline, featured_heading, featured_tagline, featured_description)
+     VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24)
      ON CONFLICT (id) DO UPDATE SET
        hero_heading=$1, hero_subheading=$2, hero_tagline=$3, about_text=$4,
        contact_phone=$5, contact_email=$6, contact_address=$7, newsletter_text=$8,
        hero_image=$9, about_image=$10,
        logo_image=$11, logo_width=$12, site_name=$13,
-       meta_title=$14, meta_description=$15, footer_description=$16, copyright_text=$17, marquee_items=$18
+       meta_title=$14, meta_description=$15, footer_description=$16, copyright_text=$17, marquee_items=$18,
+       about_second_paragraph=$19, destinations_heading=$20, destinations_tagline=$21,
+       featured_heading=$22, featured_tagline=$23, featured_description=$24
      RETURNING *`,
-    [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "", content.metaTitle || "", content.metaDescription || "", content.footerDescription || "", content.copyrightText || "", content.marqueeItems || ""]
+    [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "", content.metaTitle || "", content.metaDescription || "", content.footerDescription || "", content.copyrightText || "", content.marqueeItems || "", content.aboutSecondParagraph || "", content.destinationsHeading || "", content.destinationsTagline || "", content.featuredHeading || "", content.featuredTagline || "", content.featuredDescription || ""]
   )
   return rowToContent(rows[0])
 }
@@ -240,4 +260,59 @@ export async function createInquiry(inquiry: Omit<Inquiry, "id">): Promise<Inqui
     [inquiry.name, inquiry.email, inquiry.message, inquiry.tour || null, inquiry.firstName || null, inquiry.lastName || null, inquiry.submittedAt, inquiry.source]
   )
   return rowToInquiry(rows[0])
+}
+
+// --- Destination types ---
+export interface Destination {
+  id: number
+  name: string
+  tagline: string
+  image: string
+  sortOrder: number
+}
+
+function rowToDestination(row: Record<string, unknown>): Destination {
+  return {
+    id: row.id as number,
+    name: row.name as string,
+    tagline: row.tagline as string,
+    image: row.image as string,
+    sortOrder: row.sort_order as number,
+  }
+}
+
+export async function getDestinations(): Promise<Destination[]> {
+  const { rows } = await pool.query("SELECT * FROM destinations ORDER BY sort_order, id")
+  return rows.map(rowToDestination)
+}
+
+export async function getDestinationById(id: number): Promise<Destination | undefined> {
+  const { rows } = await pool.query("SELECT * FROM destinations WHERE id = $1", [id])
+  return rows[0] ? rowToDestination(rows[0]) : undefined
+}
+
+export async function createDestination(dest: Omit<Destination, "id">): Promise<Destination> {
+  const { rows } = await pool.query(
+    `INSERT INTO destinations (name, tagline, image, sort_order)
+     VALUES ($1,$2,$3,$4) RETURNING *`,
+    [dest.name, dest.tagline, dest.image, dest.sortOrder]
+  )
+  return rowToDestination(rows[0])
+}
+
+export async function updateDestination(id: number, updates: Partial<Destination>): Promise<Destination | null> {
+  const existing = await getDestinationById(id)
+  if (!existing) return null
+  const merged = { ...existing, ...updates, id }
+  const { rows } = await pool.query(
+    `UPDATE destinations SET name=$1, tagline=$2, image=$3, sort_order=$4
+     WHERE id=$5 RETURNING *`,
+    [merged.name, merged.tagline, merged.image, merged.sortOrder, id]
+  )
+  return rows[0] ? rowToDestination(rows[0]) : null
+}
+
+export async function deleteDestination(id: number): Promise<boolean> {
+  const { rowCount } = await pool.query("DELETE FROM destinations WHERE id = $1", [id])
+  return (rowCount ?? 0) > 0
 }

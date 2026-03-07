@@ -6,11 +6,12 @@ import { OverviewPanel } from "./overview-panel"
 import { TourManager } from "./tour-manager"
 import { BookingsFeed } from "./bookings-feed"
 import { ContentEditor } from "./content-editor"
+import { DestinationsManager } from "./destinations-manager"
 import { Menu, X } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import { SiteLogo } from "@/components/site-logo"
 
-type View = "overview" | "tours" | "bookings" | "content"
+type View = "overview" | "tours" | "bookings" | "content" | "destinations"
 
 export function DashboardShell() {
   const [activeView, setActiveView] = useState<View>("overview")
@@ -37,6 +38,8 @@ export function DashboardShell() {
         return <BookingsFeed />
       case "content":
         return <ContentEditor />
+      case "destinations":
+        return <DestinationsManager />
     }
   }
 

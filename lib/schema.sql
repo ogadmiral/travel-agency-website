@@ -46,7 +46,22 @@ CREATE TABLE IF NOT EXISTS site_content (
   meta_description TEXT NOT NULL DEFAULT '',
   footer_description TEXT NOT NULL DEFAULT '',
   copyright_text TEXT NOT NULL DEFAULT '',
-  marquee_items TEXT NOT NULL DEFAULT ''
+  marquee_items TEXT NOT NULL DEFAULT '',
+  about_second_paragraph TEXT NOT NULL DEFAULT '',
+  destinations_heading TEXT NOT NULL DEFAULT '',
+  destinations_tagline TEXT NOT NULL DEFAULT '',
+  featured_heading TEXT NOT NULL DEFAULT '',
+  featured_tagline TEXT NOT NULL DEFAULT '',
+  featured_description TEXT NOT NULL DEFAULT ''
+);
+
+-- Destinations table
+CREATE TABLE IF NOT EXISTS destinations (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL DEFAULT '',
+  tagline TEXT NOT NULL DEFAULT '',
+  image TEXT NOT NULL DEFAULT '',
+  sort_order INTEGER NOT NULL DEFAULT 0
 );
 
 -- Inquiries table

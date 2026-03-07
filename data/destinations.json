@@ -1,0 +1,6 @@
+[
+  { "name": "Marrakech", "tagline": "The Red City", "image": "/images/hero-morocco.jpg", "sortOrder": 0 },
+  { "name": "Fes", "tagline": "The Spiritual Capital", "image": "/images/medina-streets.jpg", "sortOrder": 1 },
+  { "name": "Sahara", "tagline": "The Endless Sands", "image": "/images/sahara-desert.jpg", "sortOrder": 2 },
+  { "name": "Essaouira", "tagline": "Wind City of the Atlantic", "image": "/images/essaouira-coast.jpg", "sortOrder": 3 }
+]
