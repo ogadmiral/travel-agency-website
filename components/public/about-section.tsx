@@ -32,12 +32,12 @@ export function AboutSection() {
       if (data.aboutImage) setAboutImage(data.aboutImage)
       if (data.aboutSecondParagraph) setAboutSecondParagraph(data.aboutSecondParagraph)
 
-      // Build stats from API data, filtering out empty ones
+      // Build stats from API data — include any stat that has at least a number or label
       const apiStats: { number: string; label: string }[] = []
-      if (data.stat1Number && data.stat1Label) apiStats.push({ number: data.stat1Number, label: data.stat1Label })
-      if (data.stat2Number && data.stat2Label) apiStats.push({ number: data.stat2Number, label: data.stat2Label })
-      if (data.stat3Number && data.stat3Label) apiStats.push({ number: data.stat3Number, label: data.stat3Label })
-      if (data.stat4Number && data.stat4Label) apiStats.push({ number: data.stat4Number, label: data.stat4Label })
+      if (data.stat1Number || data.stat1Label) apiStats.push({ number: data.stat1Number || "", label: data.stat1Label || "" })
+      if (data.stat2Number || data.stat2Label) apiStats.push({ number: data.stat2Number || "", label: data.stat2Label || "" })
+      if (data.stat3Number || data.stat3Label) apiStats.push({ number: data.stat3Number || "", label: data.stat3Label || "" })
+      if (data.stat4Number || data.stat4Label) apiStats.push({ number: data.stat4Number || "", label: data.stat4Label || "" })
       if (apiStats.length > 0) setStats(apiStats)
     } catch {
       // fallback to default
