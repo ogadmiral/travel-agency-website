@@ -28,7 +28,7 @@ export function ContactSection() {
   const fetchData = useCallback(async () => {
     try {
       const [contentRes, toursRes] = await Promise.all([
-        fetch("/api/content"),
+        fetch("/api/content", { cache: "no-store" }),
         fetch("/api/tours"),
       ])
       const contentData = await contentRes.json()

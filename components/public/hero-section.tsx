@@ -31,7 +31,7 @@ export function HeroSection() {
 
   const fetchContent = useCallback(async () => {
     try {
-      const res = await fetch("/api/content")
+      const res = await fetch("/api/content", { cache: "no-store" })
       const data = await res.json()
       setContent(data)
     } catch {

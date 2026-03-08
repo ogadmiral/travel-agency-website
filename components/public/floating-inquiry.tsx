@@ -9,7 +9,7 @@ export function FloatingInquiry() {
 
   const fetchPhone = useCallback(async () => {
     try {
-      const res = await fetch("/api/content")
+      const res = await fetch("/api/content", { cache: "no-store" })
       if (res.ok) {
         const data = await res.json()
         setPhone(data.contactPhone || "")

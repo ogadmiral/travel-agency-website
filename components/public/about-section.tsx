@@ -26,7 +26,7 @@ export function AboutSection() {
 
   const fetchContent = useCallback(async () => {
     try {
-      const res = await fetch("/api/content")
+      const res = await fetch("/api/content", { cache: "no-store" })
       const data = await res.json()
       if (data.aboutText) setAboutText(data.aboutText)
       if (data.aboutImage) setAboutImage(data.aboutImage)

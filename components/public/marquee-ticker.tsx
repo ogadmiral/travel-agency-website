@@ -21,7 +21,7 @@ export function MarqueeTicker() {
 
   const fetchItems = useCallback(async () => {
     try {
-      const res = await fetch("/api/content")
+      const res = await fetch("/api/content", { cache: "no-store" })
       const data = await res.json()
       if (data.marqueeItems && data.marqueeItems.trim()) {
         setItems(data.marqueeItems.split(",").map((s: string) => s.trim()).filter(Boolean))

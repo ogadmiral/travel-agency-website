@@ -31,7 +31,7 @@ export function Footer() {
 
   const fetchContent = useCallback(async () => {
     try {
-      const res = await fetch("/api/content")
+      const res = await fetch("/api/content", { cache: "no-store" })
       const data = await res.json()
       setContent({ contactEmail: data.contactEmail, newsletterText: data.newsletterText, logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "", footerDescription: data.footerDescription || "", copyrightText: data.copyrightText || "" })
     } catch {

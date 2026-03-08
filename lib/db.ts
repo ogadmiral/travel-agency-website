@@ -8,32 +8,41 @@ const pool = new Pool({
 // --- Auto-migration: ensure all expected columns exist ---
 let migrated = false
 
+const MIGRATION_COLUMNS = [
+  "about_second_paragraph",
+  "destinations_heading",
+  "destinations_tagline",
+  "featured_heading",
+  "featured_tagline",
+  "featured_description",
+  "stat1_number",
+  "stat1_label",
+  "stat2_number",
+  "stat2_label",
+  "stat3_number",
+  "stat3_label",
+  "stat4_number",
+  "stat4_label",
+]
+
 export async function ensureMigrations() {
   if (migrated) return
   try {
-    // Use ADD COLUMN IF NOT EXISTS (PostgreSQL 9.6+) in a single statement
-    await pool.query(`
-      ALTER TABLE site_content
-        ADD COLUMN IF NOT EXISTS about_second_paragraph TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS destinations_heading TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS destinations_tagline TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS featured_heading TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS featured_tagline TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS featured_description TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat1_number TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat1_label TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat2_number TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat2_label TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat3_number TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat3_label TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat4_number TEXT NOT NULL DEFAULT '',
-        ADD COLUMN IF NOT EXISTS stat4_label TEXT NOT NULL DEFAULT ''
-    `)
-    // Only mark as migrated after success
+    // Run individual ALTER TABLE statements — maximum compatibility
+    for (const col of MIGRATION_COLUMNS) {
+      try {
+        await pool.query(`ALTER TABLE site_content ADD COLUMN ${col} TEXT NOT NULL DEFAULT ''`)
+      } catch (e: unknown) {
+        const code = (e as { code?: string }).code
+        if (code !== "42701") {
+          // 42701 = column already exists, ignore it
+          console.error(`Migration column ${col}:`, e)
+        }
+      }
+    }
     migrated = true
   } catch (err) {
     console.error("Auto-migration failed:", err)
-    // Don't set migrated=true so it retries on next request
   }
 }
 

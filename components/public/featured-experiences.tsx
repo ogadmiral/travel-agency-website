@@ -32,8 +32,8 @@ export function FeaturedExperiences() {
   const fetchExperiences = useCallback(async () => {
     try {
       const [toursRes, contentRes] = await Promise.all([
-        fetch("/api/tours"),
-        fetch("/api/content"),
+        fetch("/api/tours", { cache: "no-store" }),
+        fetch("/api/content", { cache: "no-store" }),
       ])
       const data = await toursRes.json()
       const contentData = await contentRes.json()

@@ -23,7 +23,7 @@ export function SideNavigation() {
 
   const fetchLogo = useCallback(async () => {
     try {
-      const res = await fetch("/api/content")
+      const res = await fetch("/api/content", { cache: "no-store" })
       const data = await res.json()
       setLogoData({ logoImage: data.logoImage || "", logoWidth: data.logoWidth || 160, siteName: data.siteName || "" })
     } catch {}
