@@ -252,18 +252,16 @@ export async function updateSiteContent(content: SiteContent): Promise<SiteConte
     return rowToContent(rows[0])
   } catch (fullErr) {
     console.error("Full content update failed, trying base columns only:", fullErr)
-    // Fallback: save only the original base columns (pre-migration schema)
+    // Fallback: save only the absolute original columns (hero, about, contact, newsletter, images)
     const { rows } = await pool.query(
-      `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name, meta_title, meta_description, footer_description, copyright_text, marquee_items)
-       VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+      `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image)
+       VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
        ON CONFLICT (id) DO UPDATE SET
          hero_heading=$1, hero_subheading=$2, hero_tagline=$3, about_text=$4,
          contact_phone=$5, contact_email=$6, contact_address=$7, newsletter_text=$8,
-         hero_image=$9, about_image=$10,
-         logo_image=$11, logo_width=$12, site_name=$13,
-         meta_title=$14, meta_description=$15, footer_description=$16, copyright_text=$17, marquee_items=$18
+         hero_image=$9, about_image=$10
        RETURNING *`,
-      [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "", content.metaTitle || "", content.metaDescription || "", content.footerDescription || "", content.copyrightText || "", content.marqueeItems || ""]
+      [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || ""]
     )
     return rowToContent(rows[0])
   }
