@@ -7,7 +7,8 @@ export async function GET() {
   try {
     const content = await getSiteContent()
     return NextResponse.json(content)
-  } catch {
+  } catch (err) {
+    console.error("Content fetch error:", err)
     return NextResponse.json({ error: "Failed to fetch content" }, { status: 500 })
   }
 }

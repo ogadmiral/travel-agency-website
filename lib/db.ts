@@ -8,40 +8,32 @@ const pool = new Pool({
 // --- Auto-migration: ensure all expected columns exist ---
 let migrated = false
 
-const EXPECTED_COLUMNS: { table: string; name: string; type: string }[] = [
-  { table: "site_content", name: "about_second_paragraph", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "destinations_heading", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "destinations_tagline", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "featured_heading", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "featured_tagline", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "featured_description", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat1_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat1_label", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat2_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat2_label", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat3_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat3_label", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat4_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { table: "site_content", name: "stat4_label", type: "TEXT NOT NULL DEFAULT ''" },
-]
-
 export async function ensureMigrations() {
   if (migrated) return
-  migrated = true
   try {
-    for (const col of EXPECTED_COLUMNS) {
-      try {
-        await pool.query(`ALTER TABLE ${col.table} ADD COLUMN ${col.name} ${col.type}`)
-      } catch (err: unknown) {
-        const pgErr = err as { code?: string }
-        // 42701 = column already exists, 42P01 = table doesn't exist — both are fine
-        if (pgErr.code !== "42701" && pgErr.code !== "42P01") {
-          console.error(`Migration warning for ${col.table}.${col.name}:`, err)
-        }
-      }
-    }
-  } catch {
-    // Non-fatal: if migrations fail, queries will surface the real error
+    // Use ADD COLUMN IF NOT EXISTS (PostgreSQL 9.6+) in a single statement
+    await pool.query(`
+      ALTER TABLE site_content
+        ADD COLUMN IF NOT EXISTS about_second_paragraph TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS destinations_heading TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS destinations_tagline TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS featured_heading TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS featured_tagline TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS featured_description TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat1_number TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat1_label TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat2_number TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat2_label TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat3_number TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat3_label TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat4_number TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS stat4_label TEXT NOT NULL DEFAULT ''
+    `)
+    // Only mark as migrated after success
+    migrated = true
+  } catch (err) {
+    console.error("Auto-migration failed:", err)
+    // Don't set migrated=true so it retries on next request
   }
 }
 
