@@ -228,24 +228,65 @@ export async function getSiteContent(): Promise<SiteContent> {
   }
 }
 
+// Column-name-to-field mapping for dynamic query building
+const CONTENT_FIELD_MAP: { column: string; field: keyof SiteContent; fallback: string | number }[] = [
+  { column: "hero_heading", field: "heroHeading", fallback: "" },
+  { column: "hero_subheading", field: "heroSubheading", fallback: "" },
+  { column: "hero_tagline", field: "heroTagline", fallback: "" },
+  { column: "about_text", field: "aboutText", fallback: "" },
+  { column: "contact_phone", field: "contactPhone", fallback: "" },
+  { column: "contact_email", field: "contactEmail", fallback: "" },
+  { column: "contact_address", field: "contactAddress", fallback: "" },
+  { column: "newsletter_text", field: "newsletterText", fallback: "" },
+  { column: "hero_image", field: "heroImage", fallback: "" },
+  { column: "about_image", field: "aboutImage", fallback: "" },
+  { column: "logo_image", field: "logoImage", fallback: "" },
+  { column: "logo_width", field: "logoWidth", fallback: 160 },
+  { column: "site_name", field: "siteName", fallback: "" },
+  { column: "meta_title", field: "metaTitle", fallback: "" },
+  { column: "meta_description", field: "metaDescription", fallback: "" },
+  { column: "footer_description", field: "footerDescription", fallback: "" },
+  { column: "copyright_text", field: "copyrightText", fallback: "" },
+  { column: "marquee_items", field: "marqueeItems", fallback: "" },
+  { column: "about_second_paragraph", field: "aboutSecondParagraph", fallback: "" },
+  { column: "destinations_heading", field: "destinationsHeading", fallback: "" },
+  { column: "destinations_tagline", field: "destinationsTagline", fallback: "" },
+  { column: "featured_heading", field: "featuredHeading", fallback: "" },
+  { column: "featured_tagline", field: "featuredTagline", fallback: "" },
+  { column: "featured_description", field: "featuredDescription", fallback: "" },
+  { column: "stat1_number", field: "stat1Number", fallback: "" },
+  { column: "stat1_label", field: "stat1Label", fallback: "" },
+  { column: "stat2_number", field: "stat2Number", fallback: "" },
+  { column: "stat2_label", field: "stat2Label", fallback: "" },
+  { column: "stat3_number", field: "stat3Number", fallback: "" },
+  { column: "stat3_label", field: "stat3Label", fallback: "" },
+  { column: "stat4_number", field: "stat4Number", fallback: "" },
+  { column: "stat4_label", field: "stat4Label", fallback: "" },
+]
+
 export async function updateSiteContent(content: SiteContent): Promise<SiteContent> {
   await ensureMigrations()
-  const { rows } = await pool.query(
-    `INSERT INTO site_content (id, hero_heading, hero_subheading, hero_tagline, about_text, contact_phone, contact_email, contact_address, newsletter_text, hero_image, about_image, logo_image, logo_width, site_name, meta_title, meta_description, footer_description, copyright_text, marquee_items, about_second_paragraph, destinations_heading, destinations_tagline, featured_heading, featured_tagline, featured_description, stat1_number, stat1_label, stat2_number, stat2_label, stat3_number, stat3_label, stat4_number, stat4_label)
-     VALUES (1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32)
-     ON CONFLICT (id) DO UPDATE SET
-       hero_heading=$1, hero_subheading=$2, hero_tagline=$3, about_text=$4,
-       contact_phone=$5, contact_email=$6, contact_address=$7, newsletter_text=$8,
-       hero_image=$9, about_image=$10,
-       logo_image=$11, logo_width=$12, site_name=$13,
-       meta_title=$14, meta_description=$15, footer_description=$16, copyright_text=$17, marquee_items=$18,
-       about_second_paragraph=$19, destinations_heading=$20, destinations_tagline=$21,
-       featured_heading=$22, featured_tagline=$23, featured_description=$24,
-       stat1_number=$25, stat1_label=$26, stat2_number=$27, stat2_label=$28,
-       stat3_number=$29, stat3_label=$30, stat4_number=$31, stat4_label=$32
-     RETURNING *`,
-    [content.heroHeading, content.heroSubheading, content.heroTagline, content.aboutText, content.contactPhone, content.contactEmail, content.contactAddress, content.newsletterText, content.heroImage || "", content.aboutImage || "", content.logoImage || "", content.logoWidth || 160, content.siteName || "", content.metaTitle || "", content.metaDescription || "", content.footerDescription || "", content.copyrightText || "", content.marqueeItems || "", content.aboutSecondParagraph || "", content.destinationsHeading || "", content.destinationsTagline || "", content.featuredHeading || "", content.featuredTagline || "", content.featuredDescription || "", content.stat1Number || "", content.stat1Label || "", content.stat2Number || "", content.stat2Label || "", content.stat3Number || "", content.stat3Label || "", content.stat4Number || "", content.stat4Label || ""]
+
+  // Discover which columns actually exist in the table
+  const { rows: colRows } = await pool.query(
+    `SELECT column_name FROM information_schema.columns WHERE table_name = 'site_content' AND column_name != 'id'`
   )
+  const existingCols = new Set(colRows.map((r: Record<string, unknown>) => r.column_name as string))
+
+  // Only include columns that exist in the DB
+  const activeCols = CONTENT_FIELD_MAP.filter((c) => existingCols.has(c.column))
+
+  const columns = activeCols.map((c) => c.column)
+  const values = activeCols.map((c) => content[c.field] ?? c.fallback)
+  const placeholders = activeCols.map((_, i) => `$${i + 1}`)
+  const updateSet = activeCols.map((c, i) => `${c.column}=$${i + 1}`).join(", ")
+
+  const sql = `INSERT INTO site_content (id, ${columns.join(", ")})
+     VALUES (1, ${placeholders.join(", ")})
+     ON CONFLICT (id) DO UPDATE SET ${updateSet}
+     RETURNING *`
+
+  const { rows } = await pool.query(sql, values)
   return rowToContent(rows[0])
 }
 

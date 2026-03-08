@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import { Pencil, Check, X, Plus, Trash2, Loader2 } from "lucide-react"
 import { ImageUpload } from "./image-upload"
@@ -183,8 +183,13 @@ export function TourManager() {
               {tours.map((tour, i) => {
                 const isEditing = editingId === tour.id
                 return (
-                  <motion.tr key={tour.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-5 py-4 font-sans text-sm font-medium text-foreground">{tour.name}</td>
+                  <React.Fragment key={tour.id}>
+                  <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="hover:bg-muted/30 transition-colors">
+                    <td className="px-5 py-4 font-sans text-sm font-medium text-foreground">
+                      {isEditing ? (
+                        <input type="text" value={editData.name || ""} onChange={(e) => setEditData({ ...editData, name: e.target.value })} className="w-full bg-muted px-2 py-1 rounded text-sm text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
+                      ) : tour.name}
+                    </td>
                     <td className="px-5 py-4">
                       {isEditing ? (
                         <ImageUpload value={editData.image || ""} onChange={(url) => setEditData({ ...editData, image: url })} label="" className="w-32" />
@@ -192,7 +197,11 @@ export function TourManager() {
                         tour.image ? <img src={tour.image} alt={tour.name} className="w-16 h-10 object-cover rounded" /> : <span className="text-xs text-muted-foreground">No image</span>
                       )}
                     </td>
-                    <td className="px-5 py-4 font-sans text-sm text-muted-foreground">{tour.destination}</td>
+                    <td className="px-5 py-4 font-sans text-sm text-muted-foreground">
+                      {isEditing ? (
+                        <input type="text" value={editData.destination || ""} onChange={(e) => setEditData({ ...editData, destination: e.target.value })} className="w-full bg-muted px-2 py-1 rounded text-sm text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
+                      ) : tour.destination}
+                    </td>
                     <td className="px-5 py-4 font-sans text-sm">
                       {isEditing ? (
                         <input type="number" value={editData.price || ""} onChange={(e) => setEditData({ ...editData, price: Number(e.target.value) })} className="w-24 bg-muted px-2 py-1 rounded text-sm text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
@@ -200,7 +209,11 @@ export function TourManager() {
                         <span className="text-foreground">${tour.price.toLocaleString()}</span>
                       )}
                     </td>
-                    <td className="px-5 py-4 font-sans text-sm text-muted-foreground">{tour.duration}</td>
+                    <td className="px-5 py-4 font-sans text-sm text-muted-foreground">
+                      {isEditing ? (
+                        <input type="text" value={editData.duration || ""} onChange={(e) => setEditData({ ...editData, duration: e.target.value })} className="w-full bg-muted px-2 py-1 rounded text-sm text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="e.g. 3 Nights" />
+                      ) : tour.duration}
+                    </td>
                     <td className="px-5 py-4 font-sans text-sm">
                       {isEditing ? (
                         <input type="date" value={editData.nextDate || ""} onChange={(e) => setEditData({ ...editData, nextDate: e.target.value })} className="bg-muted px-2 py-1 rounded text-sm text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
@@ -235,6 +248,23 @@ export function TourManager() {
                       </div>
                     </td>
                   </motion.tr>
+                  {isEditing && (
+                    <tr className="bg-muted/20">
+                      <td colSpan={8} className="px-5 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Subtitle</label>
+                            <input type="text" value={editData.subtitle || ""} onChange={(e) => setEditData({ ...editData, subtitle: e.target.value })} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="e.g. A Cultural Immersion" />
+                          </div>
+                          <div>
+                            <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Description</label>
+                            <textarea value={editData.description || ""} onChange={(e) => setEditData({ ...editData, description: e.target.value })} rows={3} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" placeholder="Tour description..." />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  </React.Fragment>
                 )
               })}
             </tbody>

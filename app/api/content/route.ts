@@ -17,7 +17,9 @@ export async function PUT(request: Request) {
     const body = await request.json()
     const content = await updateSiteContent(body)
     return NextResponse.json(content)
-  } catch {
-    return NextResponse.json({ error: "Failed to update content" }, { status: 500 })
+  } catch (err) {
+    console.error("Content update error:", err)
+    const message = err instanceof Error ? err.message : "Unknown error"
+    return NextResponse.json({ error: "Failed to update content", detail: message }, { status: 500 })
   }
 }
