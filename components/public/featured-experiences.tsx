@@ -17,6 +17,49 @@ interface Experience {
   description: string
 }
 
+function TruncatedDescription({ text, maxLines = 3 }: { text: string; maxLines?: number }) {
+  const [expanded, setExpanded] = useState(false)
+  const [needsTruncation, setNeedsTruncation] = useState(false)
+  const textRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    const el = textRef.current
+    if (!el) return
+    // Compare scroll height vs clamped height to detect overflow
+    const lineHeight = parseFloat(getComputedStyle(el).lineHeight || "20")
+    setNeedsTruncation(el.scrollHeight > lineHeight * maxLines + 2)
+  }, [text, maxLines])
+
+  return (
+    <div>
+      <p
+        ref={textRef}
+        className="text-sm text-muted-foreground font-sans leading-relaxed"
+        style={!expanded ? {
+          display: "-webkit-box",
+          WebkitLineClamp: maxLines,
+          WebkitBoxOrient: "vertical" as const,
+          overflow: "hidden",
+        } : undefined}
+      >
+        {text}
+      </p>
+      {needsTruncation && (
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setExpanded(!expanded)
+          }}
+          className="text-xs font-sans text-terracotta hover:underline mt-1 uppercase tracking-wider"
+        >
+          {expanded ? "Show less" : "Read more"}
+        </button>
+      )}
+    </div>
+  )
+}
+
 export function FeaturedExperiences() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef(null)
@@ -110,7 +153,7 @@ export function FeaturedExperiences() {
                 {exp.name}
               </h3>
               <p className="text-xs font-sans uppercase tracking-[0.2em] text-muted-foreground mb-3">{exp.subtitle}</p>
-              <p className="text-sm text-muted-foreground font-sans leading-relaxed">{exp.description}</p>
+              <TruncatedDescription text={exp.description} maxLines={3} />
               </Link>
             </motion.article>
           ))}
