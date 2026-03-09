@@ -1,4 +1,4 @@
-import pool, { ensureMigrations } from "./db"
+import pool from "./db"
 
 // --- Tour types ---
 export interface Tour {
@@ -188,7 +188,6 @@ function rowToContent(row: Record<string, unknown>): SiteContent {
 }
 
 export async function getSiteContent(): Promise<SiteContent> {
-  await ensureMigrations()
   const { rows } = await pool.query("SELECT * FROM site_content WHERE id = 1")
   if (rows[0]) return rowToContent(rows[0])
   // Return defaults if no row exists
@@ -229,8 +228,6 @@ export async function getSiteContent(): Promise<SiteContent> {
 }
 
 export async function updateSiteContent(content: SiteContent): Promise<SiteContent> {
-  await ensureMigrations()
-
   // Try full query with all columns first
   try {
     const { rows } = await pool.query(

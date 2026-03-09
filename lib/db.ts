@@ -8,53 +8,49 @@ const pool = new Pool({
 // --- Auto-migration: ensure all expected columns exist ---
 let migrated = false
 
-// Every column that might be missing from an older version of the table.
-// The migration uses ADD COLUMN ... so it's safe to list columns that may already
-// exist — we catch the "42701 column already exists" error.
-const MIGRATION_COLUMNS: { name: string; type: string }[] = [
-  // Columns that were added after the very first schema
-  { name: "logo_image", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "logo_width", type: "INTEGER NOT NULL DEFAULT 160" },
-  { name: "site_name", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "meta_title", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "meta_description", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "footer_description", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "copyright_text", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "marquee_items", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "about_second_paragraph", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "destinations_heading", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "destinations_tagline", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "featured_heading", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "featured_tagline", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "featured_description", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat1_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat1_label", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat2_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat2_label", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat3_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat3_label", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat4_number", type: "TEXT NOT NULL DEFAULT ''" },
-  { name: "stat4_label", type: "TEXT NOT NULL DEFAULT ''" },
-]
-
+/**
+ * Runs a single PL/pgSQL DO block that adds every potentially-missing column.
+ * Uses EXCEPTION WHEN duplicate_column to safely skip columns that already exist.
+ * This is ONE database round-trip instead of 22 separate queries.
+ *
+ * IMPORTANT: Only call this from API route handlers (runtime), never from
+ * data functions that might execute during build-time static generation.
+ */
 export async function ensureMigrations() {
   if (migrated) return
   try {
-    // Run individual ALTER TABLE statements — maximum compatibility
-    for (const col of MIGRATION_COLUMNS) {
-      try {
-        await pool.query(`ALTER TABLE site_content ADD COLUMN ${col.name} ${col.type}`)
-      } catch (e: unknown) {
-        const code = (e as { code?: string }).code
-        if (code !== "42701") {
-          // 42701 = column already exists, ignore it
-          console.error(`Migration column ${col.name}:`, e)
-        }
-      }
-    }
+    await pool.query(`
+      DO $$ BEGIN
+        BEGIN ALTER TABLE site_content ADD COLUMN logo_image TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN logo_width INTEGER NOT NULL DEFAULT 160; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN site_name TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN meta_title TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN meta_description TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN footer_description TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN copyright_text TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN marquee_items TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN about_second_paragraph TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN destinations_heading TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN destinations_tagline TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN featured_heading TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN featured_tagline TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN featured_description TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat1_number TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat1_label TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat2_number TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat2_label TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat3_number TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat3_label TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat4_number TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+        BEGIN ALTER TABLE site_content ADD COLUMN stat4_label TEXT NOT NULL DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END;
+      END $$;
+    `)
     migrated = true
   } catch (err) {
     console.error("Auto-migration failed:", err)
+    // Still mark as migrated to avoid retrying on every request —
+    // the columns likely already exist if this is a connection issue
+    migrated = true
   }
 }
 

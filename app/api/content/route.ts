@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { getSiteContent, updateSiteContent } from "@/lib/data"
+import { ensureMigrations } from "@/lib/db"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -20,6 +21,7 @@ function jsonResponse(data: unknown, status = 200) {
 
 export async function GET() {
   try {
+    await ensureMigrations()
     const content = await getSiteContent()
     return jsonResponse(content)
   } catch (err) {
@@ -30,6 +32,7 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
+    await ensureMigrations()
     const body = await request.json()
     const content = await updateSiteContent(body)
     return jsonResponse(content)
