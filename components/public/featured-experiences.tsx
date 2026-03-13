@@ -7,6 +7,7 @@ import Link from "next/link"
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 import { t } from "@/lib/i18n"
+import { markdownToPlainText } from "@/lib/markdown"
 
 interface Experience {
   id: number
@@ -153,7 +154,7 @@ export function FeaturedExperiences() {
                 {exp.name}
               </h3>
               <p className="text-xs font-sans uppercase tracking-[0.2em] text-muted-foreground mb-3">{exp.subtitle}</p>
-              <TruncatedDescription text={exp.description} maxLines={3} />
+              <TruncatedDescription text={markdownToPlainText(exp.description)} maxLines={3} />
               </Link>
             </motion.article>
           ))}

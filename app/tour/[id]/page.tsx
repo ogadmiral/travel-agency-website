@@ -5,8 +5,11 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, Clock, MapPin, Calendar, DollarSign } from "lucide-react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { useLanguage } from "@/components/language-provider"
 import { t } from "@/lib/i18n"
+import { normalizeTourDescriptionToMarkdown } from "@/lib/markdown"
 
 interface Tour {
   id: number
@@ -158,9 +161,24 @@ export default function TourDetailPage({ params }: { params: Promise<{ id: strin
           transition={{ delay: 0.4 }}
           className="mb-12"
         >
-          <p className="text-muted-foreground font-sans leading-relaxed text-base lg:text-lg">
-            {tour.description}
-          </p>
+          <article className="space-y-4 text-muted-foreground font-sans leading-relaxed text-base lg:text-lg">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ children }) => <h1 className="text-3xl text-foreground" style={{ fontFamily: "var(--font-playfair)" }}>{children}</h1>,
+                h2: ({ children }) => <h2 className="text-2xl text-foreground" style={{ fontFamily: "var(--font-playfair)" }}>{children}</h2>,
+                h3: ({ children }) => <h3 className="text-xl text-foreground" style={{ fontFamily: "var(--font-playfair)" }}>{children}</h3>,
+                p: ({ children }) => <p>{children}</p>,
+                ul: ({ children }) => <ul className="list-disc pl-6 space-y-1">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal pl-6 space-y-1">{children}</ol>,
+                li: ({ children }) => <li>{children}</li>,
+                strong: ({ children }) => <strong className="text-foreground font-semibold">{children}</strong>,
+                a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-terracotta hover:text-sunset-orange underline underline-offset-2">{children}</a>,
+              }}
+            >
+              {normalizeTourDescriptionToMarkdown(tour.description)}
+            </ReactMarkdown>
+          </article>
         </motion.div>
 
         <motion.div

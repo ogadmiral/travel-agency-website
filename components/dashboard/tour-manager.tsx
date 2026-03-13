@@ -3,7 +3,10 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import { Pencil, Check, X, Plus, Trash2, Loader2 } from "lucide-react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { ImageUpload } from "./image-upload"
+import { normalizeTourDescriptionToMarkdown } from "@/lib/markdown"
 
 interface Tour {
   id: number
@@ -16,6 +19,47 @@ interface Tour {
   subtitle: string
   image: string
   description: string
+}
+
+function MarkdownPreview({ value }: { value: string }) {
+  return (
+    <div className="rounded-md border border-border bg-muted/40 p-3">
+      <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-muted-foreground mb-2">Preview</p>
+      <div className="text-sm font-sans text-foreground leading-relaxed space-y-2">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            h1: ({ children }) => <h1 className="text-xl text-foreground" style={{ fontFamily: "var(--font-playfair)" }}>{children}</h1>,
+            h2: ({ children }) => <h2 className="text-lg text-foreground" style={{ fontFamily: "var(--font-playfair)" }}>{children}</h2>,
+            h3: ({ children }) => <h3 className="text-base text-foreground" style={{ fontFamily: "var(--font-playfair)" }}>{children}</h3>,
+            p: ({ children }) => <p>{children}</p>,
+            ul: ({ children }) => <ul className="list-disc pl-5 space-y-1">{children}</ul>,
+            ol: ({ children }) => <ol className="list-decimal pl-5 space-y-1">{children}</ol>,
+            li: ({ children }) => <li>{children}</li>,
+            strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+            a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-terracotta hover:text-sunset-orange underline underline-offset-2">{children}</a>,
+          }}
+        >
+          {normalizeTourDescriptionToMarkdown(value || "")}
+        </ReactMarkdown>
+      </div>
+    </div>
+  )
+}
+
+function MarkdownCheatSheet() {
+  return (
+    <div className="rounded-md border border-border bg-background/70 p-3">
+      <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-muted-foreground mb-2">Markdown Cheat Sheet</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-sans text-muted-foreground">
+        <p><span className="text-foreground font-medium">Heading:</span> # Day-by-Day Itinerary</p>
+        <p><span className="text-foreground font-medium">Bold:</span> **Private transfer included**</p>
+        <p><span className="text-foreground font-medium">Bullet:</span> - Visit the old medina</p>
+        <p><span className="text-foreground font-medium">Numbered:</span> 1. Arrival in Marrakech</p>
+        <p className="md:col-span-2"><span className="text-foreground font-medium">Link:</span> [View details](https://example.com)</p>
+      </div>
+    </div>
+  )
 }
 
 export function TourManager() {
@@ -59,10 +103,14 @@ export function TourManager() {
 
   const saveEdit = async (id: number) => {
     try {
+      const payload = {
+        ...editData,
+        description: normalizeTourDescriptionToMarkdown(editData.description || ""),
+      }
       const res = await fetch(`/api/tours/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editData),
+        body: JSON.stringify(payload),
       })
       if (res.ok) {
         const updated = await res.json()
@@ -93,10 +141,14 @@ export function TourManager() {
 
   const handleAddTour = async () => {
     try {
+      const payload = {
+        ...newTour,
+        description: normalizeTourDescriptionToMarkdown(newTour.description || ""),
+      }
       const res = await fetch("/api/tours", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTour),
+        body: JSON.stringify(payload),
       })
       if (res.ok) {
         const created = await res.json()
@@ -155,7 +207,12 @@ export function TourManager() {
             <input type="date" value={newTour.nextDate} onChange={(e) => setNewTour({ ...newTour, nextDate: e.target.value })} className="bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
             <input type="text" placeholder="Subtitle" value={newTour.subtitle} onChange={(e) => setNewTour({ ...newTour, subtitle: e.target.value })} className="bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" />
           </div>
-          <textarea placeholder="Description" value={newTour.description} onChange={(e) => setNewTour({ ...newTour, description: e.target.value })} rows={2} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" />
+          <div className="space-y-2">
+            <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block">Description (Markdown supported)</label>
+            <textarea placeholder="Use Markdown: headings, bullet lists, bold text, links..." value={newTour.description} onChange={(e) => setNewTour({ ...newTour, description: e.target.value })} rows={6} className="w-full bg-muted px-3 py-2.5 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-y" />
+            <MarkdownCheatSheet />
+            <MarkdownPreview value={newTour.description || ""} />
+          </div>
           <ImageUpload value={newTour.image || ""} onChange={(url) => setNewTour({ ...newTour, image: url })} label="Tour Image" />
           <div className="flex gap-2">
             <button onClick={handleAddTour} className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg font-sans text-sm hover:bg-green-700 transition-colors"><Check className="w-4 h-4" />Create</button>
@@ -257,9 +314,15 @@ export function TourManager() {
                             <input type="text" value={editData.subtitle || ""} onChange={(e) => setEditData({ ...editData, subtitle: e.target.value })} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta" placeholder="e.g. A Cultural Immersion" />
                           </div>
                           <div>
-                            <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Description</label>
-                            <textarea value={editData.description || ""} onChange={(e) => setEditData({ ...editData, description: e.target.value })} rows={3} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-none" placeholder="Tour description..." />
+                            <label className="text-xs font-sans uppercase tracking-wider text-muted-foreground block mb-1.5">Description (Markdown)</label>
+                            <textarea value={editData.description || ""} onChange={(e) => setEditData({ ...editData, description: e.target.value })} rows={6} className="w-full bg-muted px-3 py-2 rounded-md text-sm font-sans text-foreground outline-none focus:ring-1 focus:ring-terracotta resize-y" placeholder="Tour description in Markdown..." />
+                            <div className="mt-2">
+                              <MarkdownCheatSheet />
+                            </div>
                           </div>
+                        </div>
+                        <div className="mt-3">
+                          <MarkdownPreview value={editData.description || ""} />
                         </div>
                       </td>
                     </tr>

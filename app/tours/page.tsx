@@ -7,6 +7,7 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 import { t } from "@/lib/i18n"
+import { markdownToPlainText } from "@/lib/markdown"
 
 interface Tour {
   id: number
@@ -115,7 +116,7 @@ export default function ToursPage() {
                   {tour.subtitle}
                 </p>
                 <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                  {tour.description}
+                  {markdownToPlainText(tour.description)}
                 </p>
               </Link>
             </motion.article>
