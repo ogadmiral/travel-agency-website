@@ -32,8 +32,11 @@ export function HeroSection() {
   const fetchContent = useCallback(async () => {
     try {
       const res = await fetch("/api/content", { cache: "no-store" })
+      if (!res.ok) return
       const data = await res.json()
-      setContent(data)
+      if (data && !data.error) {
+        setContent(data)
+      }
     } catch {
       // fallback to defaults
     }
@@ -44,7 +47,8 @@ export function HeroSection() {
   }, [fetchContent])
 
   // Split heading into lines for the hero layout
-  const headingWords = content.heroHeading.split(" ")
+  const heading = content.heroHeading || "Discover the Soul of Morocco"
+  const headingWords = heading.split(" ")
   const midpoint = Math.ceil(headingWords.length / 2)
 
   return (

@@ -30,8 +30,13 @@ function rowToTour(row: Record<string, unknown>): Tour {
 }
 
 export async function getTours(): Promise<Tour[]> {
-  const { rows } = await pool.query("SELECT * FROM tours ORDER BY id")
-  return rows.map(rowToTour)
+  try {
+    const { rows } = await pool.query("SELECT * FROM tours ORDER BY id")
+    return rows.map(rowToTour)
+  } catch (err) {
+    console.error("Database query failed for tours:", err)
+    return []
+  }
 }
 
 export async function getTourById(id: number): Promise<Tour | undefined> {
@@ -93,8 +98,13 @@ function rowToBooking(row: Record<string, unknown>): Booking {
 }
 
 export async function getBookings(): Promise<Booking[]> {
-  const { rows } = await pool.query("SELECT * FROM bookings ORDER BY id DESC")
-  return rows.map(rowToBooking)
+  try {
+    const { rows } = await pool.query("SELECT * FROM bookings ORDER BY id DESC")
+    return rows.map(rowToBooking)
+  } catch (err) {
+    console.error("Database query failed for bookings:", err)
+    return []
+  }
 }
 
 export async function createBooking(booking: Omit<Booking, "id">): Promise<Booking> {
@@ -188,9 +198,13 @@ function rowToContent(row: Record<string, unknown>): SiteContent {
 }
 
 export async function getSiteContent(): Promise<SiteContent> {
-  const { rows } = await pool.query("SELECT * FROM site_content WHERE id = 1")
-  if (rows[0]) return rowToContent(rows[0])
-  // Return defaults if no row exists
+  try {
+    const { rows } = await pool.query("SELECT * FROM site_content WHERE id = 1")
+    if (rows[0]) return rowToContent(rows[0])
+  } catch (err) {
+    console.error("Database query failed (returning defaults):", err)
+  }
+  // Return defaults if no row exists or database is empty
   return {
     heroHeading: "",
     heroSubheading: "",
@@ -292,8 +306,13 @@ function rowToInquiry(row: Record<string, unknown>): Inquiry {
 }
 
 export async function getInquiries(): Promise<Inquiry[]> {
-  const { rows } = await pool.query("SELECT * FROM inquiries ORDER BY id DESC")
-  return rows.map(rowToInquiry)
+  try {
+    const { rows } = await pool.query("SELECT * FROM inquiries ORDER BY id DESC")
+    return rows.map(rowToInquiry)
+  } catch (err) {
+    console.error("Database query failed for inquiries:", err)
+    return []
+  }
 }
 
 export async function createInquiry(inquiry: Omit<Inquiry, "id">): Promise<Inquiry> {
@@ -325,8 +344,13 @@ function rowToDestination(row: Record<string, unknown>): Destination {
 }
 
 export async function getDestinations(): Promise<Destination[]> {
-  const { rows } = await pool.query("SELECT * FROM destinations ORDER BY sort_order, id")
-  return rows.map(rowToDestination)
+  try {
+    const { rows } = await pool.query("SELECT * FROM destinations ORDER BY sort_order, id")
+    return rows.map(rowToDestination)
+  } catch (err) {
+    console.error("Database query failed for destinations:", err)
+    return []
+  }
 }
 
 export async function getDestinationById(id: number): Promise<Destination | undefined> {
